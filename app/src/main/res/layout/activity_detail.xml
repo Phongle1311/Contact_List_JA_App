@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/snow_white"
+    tools:context=".DetailActivity">
+
+    <ImageView
+        android:id="@+id/img_avt_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:maxHeight="300dp"
+        android:scaleType="centerCrop"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageButton
+        android:id="@+id/btn_back_detail"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@null"
+        android:contentDescription="@string/turn_back"
+        app:srcCompat="@drawable/ic_arrow_back" />
+
+    <TextView
+        android:id="@+id/tv_name_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="60dp"
+        android:textColor="@color/White"
+        android:layout_centerHorizontal="true"
+        android:layout_alignBottom="@id/img_avt_detail"
+        android:layout_marginBottom="50dp"/>
+
+    <ImageButton
+        android:id="@+id/btn_important_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:contentDescription="@string/turn_back"
+        android:layout_alignEnd = "@+id/img_avt_detail"
+        android:layout_alignBottom = "@+id/img_avt_detail"
+        app:srcCompat="@drawable/pink_circle_start"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="-50dp"/>
+
+    <ImageButton
+        android:id="@+id/btn_edit_detail"
+        android:layout_width="60dp"
+        android:layout_height="80dp"
+        android:background="@null"
+        android:layout_toStartOf = "@+id/btn_more_detail"
+        android:contentDescription="@string/edit"
+        app:srcCompat="@drawable/ic_edit" />
+
+    <ImageButton
+        android:id="@+id/btn_more_detail"
+        android:layout_width="60dp"
+        android:layout_height="80dp"
+        android:background="@null"
+        android:layout_alignEnd = "@+id/img_avt_detail"
+        android:contentDescription="@string/more_info"
+        app:srcCompat="@drawable/ic_more_vert" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below = "@+id/img_avt_detail"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text = ""/>
+    </LinearLayout>
+</RelativeLayout>

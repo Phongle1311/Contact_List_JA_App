@@ -1,2 +1,8 @@
 # Contact_List_JA_App
-An Android application which show list contact and show detail contact
+## Description:
+An Android application which show list contact and show detail contact.
+## Detail:
+- Using RecyclerView with __multiple item types__.
+- onClick handler for showing detail contact.
+## Mockup Images:
+__Pixel 4 API 32__

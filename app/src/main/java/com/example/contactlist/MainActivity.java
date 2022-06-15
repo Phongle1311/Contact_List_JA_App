@@ -1,4 +1,4 @@
- package com.example.contactlist;
+package com.example.contactlist;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,9 +12,9 @@ import com.example.contactlist.module.Contact;
 import java.util.ArrayList;
 import java.util.List;
 
- public class MainActivity extends AppCompatActivity {
-     private RecyclerView rcvContact;
-     private ContactAdapter contactAdapter;
+public class MainActivity extends AppCompatActivity {
+    private RecyclerView rcvContact;
+    private ContactAdapter contactAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,12 +22,12 @@ import java.util.List;
         setContentView(R.layout.activity_main);
 
         rcvContact = findViewById(R.id.rcv_contact);
-        contactAdapter = new ContactAdapter();
+        contactAdapter = new ContactAdapter(this, getListContacts());
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rcvContact.setLayoutManager(linearLayoutManager);
 
-        contactAdapter.setData(getListContacts());
+        //contactAdapter.setData(getListContacts());
         rcvContact.setAdapter(contactAdapter);
     }
 
@@ -41,14 +41,14 @@ import java.util.List;
         list.add(contact1);
 
         Contact contact2 = new Contact("Contact 2", R.drawable.ic_save_name,
-                 "0387671963", "0387671963",
-                 "hoaiphong13.11.2002@gmail.com", "20120545@student.hcmus.edu.vn", true);
+                "0387671963", "0387671963",
+                "hoaiphong13.11.2002@gmail.com", "20120545@student.hcmus.edu.vn", true);
         contact2.setType(1);
         list.add(contact2);
 
         Contact contact3 = new Contact("Contact 3", R.drawable.ic_save_name,
-                 "0387671963", "0387671963",
-                 "hoaiphong13.11.2002@gmail.com", "20120545@student.hcmus.edu.vn", true);
+                "0387671963", "0387671963",
+                "hoaiphong13.11.2002@gmail.com", "20120545@student.hcmus.edu.vn", true);
         contact3.setType(1);
         list.add(contact3);
 
@@ -65,5 +65,5 @@ import java.util.List;
         list.add(contact5);
 
         return list;
-     }
- }
+    }
+}
