@@ -12,13 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:maxHeight="300dp"
+        android:contentDescription="@string/avatar"
+        android:maxHeight="250dp"
         android:scaleType="centerCrop"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageButton
         android:id="@+id/btn_back_detail"
-        android:layout_width="80dp"
+        android:layout_width="60dp"
         android:layout_height="80dp"
         android:background="@null"
         android:contentDescription="@string/turn_back"
@@ -28,31 +29,20 @@
         android:id="@+id/tv_name_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="60dp"
-        android:textColor="@color/White"
-        android:layout_centerHorizontal="true"
+        android:layout_alignStart="@+id/img_avt_detail"
         android:layout_alignBottom="@id/img_avt_detail"
-        android:layout_marginBottom="50dp"/>
-
-    <ImageButton
-        android:id="@+id/btn_important_detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:contentDescription="@string/turn_back"
-        android:layout_alignEnd = "@+id/img_avt_detail"
-        android:layout_alignBottom = "@+id/img_avt_detail"
-        app:srcCompat="@drawable/pink_circle_start"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="-50dp"/>
+        android:layout_marginStart="70dp"
+        android:layout_marginBottom="50dp"
+        android:text=""
+        android:textColor="@color/White"
+        android:textSize="60sp" />
 
     <ImageButton
         android:id="@+id/btn_edit_detail"
         android:layout_width="60dp"
         android:layout_height="80dp"
+        android:layout_toStartOf="@+id/btn_more_detail"
         android:background="@null"
-        android:layout_toStartOf = "@+id/btn_more_detail"
         android:contentDescription="@string/edit"
         app:srcCompat="@drawable/ic_edit" />
 
@@ -60,20 +50,224 @@
         android:id="@+id/btn_more_detail"
         android:layout_width="60dp"
         android:layout_height="80dp"
+        android:layout_alignEnd="@+id/img_avt_detail"
         android:background="@null"
-        android:layout_alignEnd = "@+id/img_avt_detail"
         android:contentDescription="@string/more_info"
         app:srcCompat="@drawable/ic_more_vert" />
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below = "@+id/img_avt_detail"
-        >
-        <TextView
+        android:layout_below="@+id/img_avt_detail"
+        android:background="@color/snow_white"
+        android:orientation="vertical"
+        android:paddingTop="50dp">
+
+        <LinearLayout
+            android:id="@+id/layout_mobile_phone_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text = ""/>
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:contentDescription="@string/phone_number"
+                app:srcCompat="@drawable/ic_phone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp">
+
+                    <TextView
+                        android:id="@+id/tv_mobile_phone_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="25sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="3dp"
+                        android:text="@string/mobile"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/btn_mobile_hangouts_detail"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="30dp"
+                    android:background="@null"
+                    android:contentDescription="@string/hangouts"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@drawable/hangouts_icon" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_work_phone_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:background="@null"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingTop="20dp"
+                        android:paddingBottom="20dp">
+
+                        <TextView
+                            android:id="@+id/tv_work_phone_detail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textSize="25sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="3dp"
+                            android:text="@string/work"
+                            android:textColor="@color/dark_gray"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/btn_work_hangouts_detail"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="30dp"
+                        android:background="@null"
+                        android:scaleType="centerCrop"
+                        tools:srcCompat="@drawable/hangouts_icon"
+                        android:contentDescription="@string/hangouts" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_personal_mail_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:contentDescription="@string/phone_number"
+                app:srcCompat="@drawable/ic_mail" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp">
+
+                    <TextView
+                        android:id="@+id/tv_personal_mail_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="25sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="3dp"
+                        android:text="@string/personal"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="18sp" />
+                </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_work_mail_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:background="@null"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:id="@+id/tv_work_mail_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="3dp"
+                    android:text="@string/work"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btn_important_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/img_avt_detail"
+        android:layout_alignBottom="@+id/img_avt_detail"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="-50dp"
+        android:background="@null"
+        android:contentDescription="@string/turn_back"
+        app:srcCompat="@drawable/pink_circle_star" />
 </RelativeLayout>
