@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Contact List</string>
+    <string name="show_menu">show menu</string>
+    <string name="all">All</string>
+    <string name="filter">filter</string>
+    <string name="search">search</string>
+    <string name="more_act">more act</string>
+    <string name="first_letter">first letter</string>
 </resources>

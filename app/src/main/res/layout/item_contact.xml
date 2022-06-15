@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/snow_white"
+    android:orientation="horizontal"
+    android:paddingBottom="30dp"
+    android:weightSum="10">
+
+    <ImageButton
+        android:id="@+id/btn_first_letter"
+        android:layout_width="70dp"
+        android:layout_height="match_parent"
+        android:background="@color/snow_white"
+        android:contentDescription="@string/first_letter" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="9"
+        android:gravity=""
+        android:paddingStart="20dp"
+        android:text="abc"
+        android:textSize="20sp" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_avt"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_weight="1"
+        tools:src="@tools:sample/avatars"
+        app:civ_border_width = "1dp"
+        app:civ_border_color = "@color/gray"/>
+
+</LinearLayout>
