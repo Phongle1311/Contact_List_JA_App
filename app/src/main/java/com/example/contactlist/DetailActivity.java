@@ -5,6 +5,7 @@ import static java.util.ResourceBundle.getBundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,11 +19,17 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        ImageButton btnBackDetail= findViewById(R.id.btn_back_detail);
+        btnBackDetail.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
         Bundle bundle = getIntent().getExtras();
         if (bundle == null)
             return;
-
-
 
         Contact contact = (Contact) bundle.get("object_contact");
         ImageView imgAvtDetail = findViewById(R.id.img_avt_detail);
