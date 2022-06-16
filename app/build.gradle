@@ -38,6 +38,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     // rounded image
-//    implementation 'de.hdodenhof:circleimageview:1.2.1'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    // runtime permissions: dexter lib
+    implementation 'com.karumi:dexter:6.2.2'
 }

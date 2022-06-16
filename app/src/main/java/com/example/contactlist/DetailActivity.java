@@ -10,7 +10,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.contactlist.module.Contact;
+import com.example.contactlist.modal.Contact;
 
 public class DetailActivity extends AppCompatActivity {
 

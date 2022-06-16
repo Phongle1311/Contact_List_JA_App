@@ -1,4 +1,4 @@
-package com.example.contactlist.module;
+package com.example.contactlist.modal;
 
 import java.io.Serializable;
 
@@ -15,7 +15,7 @@ public class Contact implements Serializable {
     private int type;
 
     public Contact(String name, int resourceID, String mobilePhoneNumber, String workPhoneNumber, String personMail, String workMail, Boolean isImportant) {
-        Name = name;
+        this.Name = name;
         this.resourceID = resourceID;
         this.mobilePhoneNumber = mobilePhoneNumber;
         this.workPhoneNumber = workPhoneNumber;
