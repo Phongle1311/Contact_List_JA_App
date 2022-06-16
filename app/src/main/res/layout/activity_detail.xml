@@ -35,7 +35,7 @@
         android:layout_marginBottom="50dp"
         android:text=""
         android:textColor="@color/White"
-        android:textSize="60sp" />
+        android:textSize="60sp"/>
 
     <ImageButton
         android:id="@+id/btn_edit_detail"
@@ -269,5 +269,5 @@
         android:layout_marginBottom="-50dp"
         android:background="@null"
         android:contentDescription="@string/turn_back"
-        app:srcCompat="@drawable/pink_circle_star" />
+        app:srcCompat="@drawable/white_circle_star" />
 </RelativeLayout>
