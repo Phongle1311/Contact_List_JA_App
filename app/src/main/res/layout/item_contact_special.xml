@@ -10,16 +10,14 @@
     android:paddingBottom="30dp"
     android:weightSum="10">
 
-    <TextView
-        android:id="@+id/tv_first_letter_head"
+    <ImageButton
+        android:id="@+id/btn_first_letter_special"
         android:layout_width="70dp"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text = "A"
         android:layout_marginBottom="-30dp"
-        android:textStyle="bold"
-        android:textColor = "@color/pink"
-        android:textSize = "40sp"/>
+        android:background="@color/snow_white"
+        android:contentDescription="@string/first_letter"
+        app:srcCompat="@drawable/ic_star" />
 
     <LinearLayout
         android:layout_width="match_parent"

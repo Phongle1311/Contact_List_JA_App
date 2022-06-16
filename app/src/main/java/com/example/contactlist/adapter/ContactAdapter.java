@@ -93,7 +93,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         else if (holder.getItemViewType() == TYPE_HEAD_CONTACT){
             ContactHeadViewHolder contactHeadViewHolder;
             contactHeadViewHolder = (ContactHeadViewHolder) holder;
-            contactHeadViewHolder.imgBtnHead.setImageResource(contact.getResourceID()); // chưa đúng, sửa sau
+            contactHeadViewHolder.imgBtnHead.setText(contact.getName().charAt(0) + "");
             contactHeadViewHolder.tvHead.setText(contact.getName());
             contactHeadViewHolder.civHead.setImageResource(contact.getResourceID());
 
@@ -111,6 +111,10 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (mContactList != null)
             return mContactList.size();
         return 0;
+    }
+
+    public void release() {
+        mContext = null;
     }
 
 
@@ -132,7 +136,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public static class ContactHeadViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout lItemHead;
-        private ImageButton imgBtnHead;
+        private TextView imgBtnHead;
         private TextView tvHead;
         private CircleImageView civHead;
 
@@ -140,7 +144,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super(itemView);
 
             lItemHead = (LinearLayout) itemView.findViewById(R.id.layout_item_contact_head);
-            imgBtnHead = itemView.findViewById(R.id.btn_first_letter_head);
+            imgBtnHead = itemView.findViewById(R.id.tv_first_letter_head);
             tvHead = itemView.findViewById(R.id.tv_name_head);
             civHead = itemView.findViewById(R.id.civ_avt_head);
         }

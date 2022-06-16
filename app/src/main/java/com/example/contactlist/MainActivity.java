@@ -31,6 +31,13 @@ public class MainActivity extends AppCompatActivity {
         rcvContact.setAdapter(contactAdapter);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (contactAdapter != null)
+            contactAdapter.release();
+    }
+
     private List<Contact> getListContacts() {
         List<Contact> list = new ArrayList<>();
 
