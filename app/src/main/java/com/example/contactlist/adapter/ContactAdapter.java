@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,21 +19,24 @@ import com.example.contactlist.DetailActivity;
 import com.example.contactlist.R;
 import com.example.contactlist.modal.Contact;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     private static final int TYPE_CONTACT = 1;
     private static final int TYPE_HEAD_CONTACT = 2;
     private static final int TYPE_SPECIAL_CONTACT = 3;
 
     private Context mContext;
     private List<Contact> mContactList;
+    private List<Contact> mContactListOld;
 
     public ContactAdapter(Context context, List<Contact> contactList) {
         mContext = context;
         mContactList = contactList;
+        mContactListOld = mContactList;
         notifyDataSetChanged(); // ...
     }
 
@@ -128,7 +133,6 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mContext = null;
     }
 
-
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout lItem;
 //        private ImageButton imgBtn;
@@ -185,5 +189,38 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Intent intent = new Intent(mContext, DetailActivity.class);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
+    }
+
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String searchStr = charSequence.toString();
+                if (searchStr.isEmpty()) {
+                    mContactList = mContactListOld;
+                }
+                else {
+                    List<Contact> contacts = new ArrayList<>();
+                    for (Contact contact : mContactListOld) {
+                        if (contact.getName().toLowerCase().contains(searchStr.toLowerCase())) {
+                            contacts.add(contact);
+                        }
+                    }
+                    mContactList = contacts;
+                }
+                
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mContactList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                mContactList = (List<Contact>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 }

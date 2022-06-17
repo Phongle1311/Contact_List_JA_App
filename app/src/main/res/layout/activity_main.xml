@@ -39,7 +39,13 @@
             android:background="@null"
             app:srcCompat="@drawable/ic_arrow_dropdown"
             android:contentDescription="@string/filter" />
-
+<!--
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight = "1"
+            />
         <ImageButton
             android:id="@+id/btn_search"
             android:layout_width="wrap_content"
@@ -47,6 +53,7 @@
             android:background="@null"
             app:srcCompat="@drawable/ic_search"
             android:contentDescription="@string/search" />
+-->
 
         <ImageButton
             android:id="@+id/btn_more"
