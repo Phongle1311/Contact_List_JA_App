@@ -11,6 +11,7 @@ import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -207,6 +208,9 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         if (contact.getName().toLowerCase().contains(searchStr.toLowerCase())) {
                             contacts.add(contact);
                         }
+                    }
+                    if (contacts.isEmpty()) {
+                        Toast.makeText(mContext,"No Contact Found", Toast.LENGTH_SHORT).show();
                     }
                     mContactList = contacts;
                 }
