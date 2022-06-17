@@ -43,7 +43,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private RecyclerView rcvContact;
     private ContactAdapter contactAdapter;
-    private ArrayList<Contact> mListContacts;
+    private List<Contact> mListContacts;
     private SearchView searchView;
 
     @Override
@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getContacts() {
+        List<Contact> favorites = new ArrayList<Contact>();
         String contactId = "";
         String displayName = "";
         int index;
@@ -93,8 +94,13 @@ public class MainActivity extends AppCompatActivity {
                         index = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
                         String phoneNumber = phoneCursor.getString(index);
                         Contact contact = new Contact(displayName, R.drawable.hangouts_icon,
-                                phoneNumber, phoneNumber, "gmail", "gmail", false);
-                        contact.setType(3);
+                                phoneNumber, phoneNumber, "gmail", "gmail", true);
+                        contact.setType(1);
+                        if (contact.getImportant())
+                            favorites.add(contact);
+                        contact = new Contact(displayName, R.drawable.hangouts_icon,
+                                phoneNumber, phoneNumber, "gmail", "gmail", true);
+                        contact.setType(1);
                         mListContacts.add(contact);
                     }
                     phoneCursor.close();
@@ -109,6 +115,28 @@ public class MainActivity extends AppCompatActivity {
                 return lhs.getName().toLowerCase().compareTo(rhs.getName().toLowerCase());
             }
         });
+
+
+        for (int i = 0; i < mListContacts.size(); i++) {
+            Contact contact = mListContacts.get(i);
+            contact.setType(2);
+            if (i != 0) {
+                if (contact.getName().toLowerCase().charAt(0) == mListContacts.get(i-1)
+                        .getName().toLowerCase().charAt(0)) {
+                    contact.setType(1);
+                }
+            }
+            mListContacts.set(i, contact);
+        }
+
+        if (favorites.size()>0) {
+            Contact c = favorites.get(0);
+            c.setType(3);
+            favorites.set(0, c);
+            favorites.addAll(mListContacts);
+            mListContacts = favorites;
+        }
+
         //loadingPB.setVisibility(View.GONE);
         //contactRVAdapter.notifyDataSetChanged();
     }

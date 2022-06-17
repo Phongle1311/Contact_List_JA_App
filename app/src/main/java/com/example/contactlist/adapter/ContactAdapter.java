@@ -99,6 +99,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ContactHeadViewHolder contactHeadViewHolder;
             contactHeadViewHolder = (ContactHeadViewHolder) holder;
             contactHeadViewHolder.tvHead.setText(contact.getName());
+            contactHeadViewHolder.imgBtnHead.setText(contact.getName().charAt(0) + "");
             contactHeadViewHolder.civHead.setImageResource(contact.getResourceID());
 
             contactHeadViewHolder.lItemHead.setOnClickListener(new View.OnClickListener() {
