@@ -35,7 +35,10 @@ import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView rcvContact;
@@ -70,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         String contactId = "";
         String displayName = "";
         int index;
+
         Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -98,6 +102,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         cursor.close();
+
+        Collections.sort(mListContacts, new Comparator<Contact>() {
+            @Override
+            public int compare(Contact lhs, Contact rhs) {
+                return lhs.getName().toLowerCase().compareTo(rhs.getName().toLowerCase());
+            }
+        });
         //loadingPB.setVisibility(View.GONE);
         //contactRVAdapter.notifyDataSetChanged();
     }
