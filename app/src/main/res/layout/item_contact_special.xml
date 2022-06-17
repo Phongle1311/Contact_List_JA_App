@@ -36,7 +36,7 @@
             android:orientation="horizontal"
             android:paddingTop="30dp">
             <TextView
-                android:id="@+id/tv_name_head"
+                android:id="@+id/tv_name_special"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="9"
@@ -45,7 +45,7 @@
                 android:textSize="20sp" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/civ_avt_head"
+                android:id="@+id/civ_avt_special"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
                 android:layout_weight="1"

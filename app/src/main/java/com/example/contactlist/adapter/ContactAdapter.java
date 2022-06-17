@@ -22,8 +22,9 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-    private static int TYPE_CONTACT = 1;
-    private static int TYPE_HEAD_CONTACT = 2;
+    private static final int TYPE_CONTACT = 1;
+    private static final int TYPE_HEAD_CONTACT = 2;
+    private static final int TYPE_SPECIAL_CONTACT = 3;
 
     private Context mContext;
     private List<Contact> mContactList;
@@ -34,12 +35,6 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         notifyDataSetChanged(); // ...
     }
 
-    // @SuppressLint("NotifyDataSetChanged")
-//    public void setData(List<Contact> contactList) {
-//        mContactList = contactList;
-//        notifyDataSetChanged();     // ...
-//    }
-
     @Override
     public int getItemViewType(int position) {
         Contact contact = mContactList.get(position);
@@ -48,6 +43,8 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             return TYPE_CONTACT;
         else if (type == 2)
             return TYPE_HEAD_CONTACT;
+        else if (type == 3)
+            return TYPE_SPECIAL_CONTACT;
         return 0;
     }
 
@@ -64,19 +61,24 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     .inflate(R.layout.item_contact_head, parent, false);
             return new ContactHeadViewHolder(view);
         }
-        return null;
+        else if (viewType == TYPE_SPECIAL_CONTACT) {
+            View view =  LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_contact_special, parent, false);
+            return new ContactSpecialViewHolder(view);
+        }
+        return null; // ...
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Contact contact = mContactList.get(position); // thêm final nếu lỗi
+        Contact contact = mContactList.get(position);
         if (contact == null)
             return;
 
         if (holder.getItemViewType() == TYPE_CONTACT) {
             ContactViewHolder contactViewHolder;
             contactViewHolder = (ContactViewHolder) holder;
-            contactViewHolder.imgBtn.setImageResource(contact.getResourceID()); // chưa đúng, sửa sau
+//            contactViewHolder.imgBtn.setImageResource(contact.getResourceID()); // chưa đúng, sửa sau
             contactViewHolder.tv.setText(contact.getName());
             contactViewHolder.civ.setImageResource(contact.getResourceID());
 
@@ -90,11 +92,23 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         else if (holder.getItemViewType() == TYPE_HEAD_CONTACT){
             ContactHeadViewHolder contactHeadViewHolder;
             contactHeadViewHolder = (ContactHeadViewHolder) holder;
-            contactHeadViewHolder.imgBtnHead.setText(contact.getName().charAt(0) + "");
             contactHeadViewHolder.tvHead.setText(contact.getName());
             contactHeadViewHolder.civHead.setImageResource(contact.getResourceID());
 
             contactHeadViewHolder.lItemHead.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onDetailClick(contact);
+                }
+            });
+        }
+        else if (holder.getItemViewType() == TYPE_SPECIAL_CONTACT){
+            ContactSpecialViewHolder contactSpecialViewHolder;
+            contactSpecialViewHolder = (ContactSpecialViewHolder) holder;
+            contactSpecialViewHolder.tvSpecial.setText(contact.getName());
+            contactSpecialViewHolder.civSpecial.setImageResource(contact.getResourceID());
+
+            contactSpecialViewHolder.lItemSpecial.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     onDetailClick(contact);
@@ -117,15 +131,15 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout lItem;
-        private ImageButton imgBtn;
+//        private ImageButton imgBtn;
         private TextView tv;
         private CircleImageView civ;
 
         public ContactViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            lItem = (LinearLayout) itemView.findViewById(R.id.layout_item_contact);
-            imgBtn = itemView.findViewById(R.id.btn_first_letter);
+            lItem = itemView.findViewById(R.id.layout_item_contact);
+//            imgBtn = itemView.findViewById(R.id.btn_first_letter);
             tv = itemView.findViewById(R.id.tv_name);
             civ = itemView.findViewById(R.id.civ_avt);
         }
@@ -140,10 +154,26 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public ContactHeadViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            lItemHead = (LinearLayout) itemView.findViewById(R.id.layout_item_contact_head);
+            lItemHead = itemView.findViewById(R.id.layout_item_contact_head);
             imgBtnHead = itemView.findViewById(R.id.tv_first_letter_head);
             tvHead = itemView.findViewById(R.id.tv_name_head);
             civHead = itemView.findViewById(R.id.civ_avt_head);
+        }
+    }
+
+    public static class ContactSpecialViewHolder extends RecyclerView.ViewHolder {
+        private LinearLayout lItemSpecial;
+//        private ImageButton imgBtnSpecial;
+        private TextView tvSpecial;
+        private CircleImageView civSpecial;
+
+        public ContactSpecialViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            lItemSpecial = itemView.findViewById(R.id.layout_item_contact_head);
+//            imgBtnSpecial = itemView.findViewById(R.id.btn_first_letter_special);
+            tvSpecial = itemView.findViewById(R.id.tv_name_special);
+            civSpecial = itemView.findViewById(R.id.civ_avt_special);
         }
     }
 

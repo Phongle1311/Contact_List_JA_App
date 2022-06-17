@@ -65,47 +65,34 @@ public class MainActivity extends AppCompatActivity {
         String contactId = "";
         String displayName = "";
         int index;
-        // on below line we are calling our content resolver for getting contacts
         Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
-        // on blow line we are checking the count for our cursor.
         if (cursor.getCount() > 0) {
-            // if the count is greater than 0 then we are running a loop to move our cursor to next.
             while (cursor.moveToNext()) {
-                // on below line we are getting the phone number.
                 index = cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER);
                 int hasPhoneNumber = Integer.parseInt(cursor.getString(index));
                 if (hasPhoneNumber > 0) {
-                    // we are checking if the has phone number is > 0
-                    // on below line we are getting our contact id and user name for that contact
                     index = cursor.getColumnIndex(ContactsContract.Contacts._ID);
                     contactId = cursor.getString(index);
                     index = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
                     displayName = cursor.getString(index);
-                    // on below line we are calling a content resolver and making a query
                     Cursor phoneCursor = getContentResolver().query(
-                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null,
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,
                             ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
                             new String[]{contactId},
                             null);
-                    // on below line we are moving our cursor to next position.
                     if (phoneCursor.moveToNext()) {
-                        // on below line we are getting the phone number for our users and then adding the name along with phone number in array list.
                         index = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
                         String phoneNumber = phoneCursor.getString(index);
                         Contact contact = new Contact(displayName, R.drawable.hangouts_icon,
                                 phoneNumber, phoneNumber, "gmail", "gmail", false);
-                        contact.setType(1);
+                        contact.setType(3);
                         mListContacts.add(contact);
                     }
-                    // on below line we are closing our phone cursor.
                     phoneCursor.close();
                 }
             }
         }
-        // on below line we are closing our cursor.
         cursor.close();
-        // on below line we are hiding our progress bar and notifying our adapter class.
         //loadingPB.setVisibility(View.GONE);
         //contactRVAdapter.notifyDataSetChanged();
     }
