@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.Settings;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.example.contactlist.adapter.ContactAdapter;
@@ -43,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mListContacts = new ArrayList<>();
-
         requestPermissions();
 
         rcvContact = findViewById(R.id.rcv_contact);
