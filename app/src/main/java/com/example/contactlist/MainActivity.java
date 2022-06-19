@@ -111,13 +111,13 @@ public class MainActivity extends AppCompatActivity {
                             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,
                             ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
                             new String[]{contactId},null);
-                    index = phoneCursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI);
+//                    index = phoneCursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI);
 //                    phoneThumb = phoneCursor.getString(index);
                     if (phoneCursor.moveToNext()) {
                         index = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
                         String phoneNumber = phoneCursor.getString(index);
-
-//                        index = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI);
+                        index = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI);
+                        phoneThumb = phoneCursor.getString(index);
                         Contact contact = new Contact(displayName);
                         contact.setMobilePhoneNumber(phoneNumber);
                         contact.setWorkPhoneNumber(phoneNumber);
@@ -126,16 +126,17 @@ public class MainActivity extends AppCompatActivity {
                         contact.setImportant(true);
                         contact.setThumbnail(phoneThumb);
                         contact.setType(1);
-                        if (contact.getImportant())
+                        if (contact.getImportant()){
                             favorites.add(contact);
+                            contact = new Contact(displayName);
+                            contact.setMobilePhoneNumber(phoneNumber);
+                            contact.setWorkPhoneNumber(phoneNumber);
+                            contact.setPersonMail("gmail");
+                            contact.setWorkMail("gmail");
+                            contact.setThumbnail(phoneThumb);
+                            contact.setImportant(true);
+                        }
 
-                        contact = new Contact(displayName);
-                        contact.setMobilePhoneNumber(phoneNumber);
-                        contact.setWorkPhoneNumber(phoneNumber);
-                        contact.setPersonMail("gmail");
-                        contact.setWorkMail("gmail");
-                        contact.setThumbnail(phoneThumb);
-                        contact.setImportant(true);
                         contact.setType(1);
                         mListContacts.add(contact);
                     }
