@@ -4,25 +4,26 @@ import java.io.Serializable;
 
 public class Contact implements Serializable {
     private String Name;
-    private int resourceID;
+    private String thumbnail;
     private String mobilePhoneNumber;
     private String workPhoneNumber;
     private String personMail;
     private String workMail;
     private Boolean isImportant;
-
-    //
     private int type;
 
-    public Contact(String name, int resourceID, String mobilePhoneNumber, String workPhoneNumber, String personMail, String workMail, Boolean isImportant) {
+    public Contact(String name) {
         this.Name = name;
-        this.resourceID = resourceID;
-        this.mobilePhoneNumber = mobilePhoneNumber;
-        this.workPhoneNumber = workPhoneNumber;
-        this.personMail = personMail;
-        this.workMail = workMail;
-        this.isImportant = isImportant;
     }
+//    public Contact(String name, String resourceID, String mobilePhoneNumber, String workPhoneNumber, String personMail, String workMail, Boolean isImportant) {
+//        this.Name = name;
+//        this.thumbnail = resourceID;
+//        this.mobilePhoneNumber = mobilePhoneNumber;
+//        this.workPhoneNumber = workPhoneNumber;
+//        this.personMail = personMail;
+//        this.workMail = workMail;
+//        this.isImportant = isImportant;
+//    }
 
     public String getName() {
         return Name;
@@ -32,12 +33,12 @@ public class Contact implements Serializable {
         Name = name;
     }
 
-    public int getResourceID() {
-        return resourceID;
+    public String getThumbnail() {
+        return thumbnail;
     }
 
-    public void setResourceID(int resourceID) {
-        this.resourceID = resourceID;
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     public String getMobilePhoneNumber() {

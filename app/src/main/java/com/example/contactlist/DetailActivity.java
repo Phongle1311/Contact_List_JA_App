@@ -4,6 +4,7 @@ import static java.util.ResourceBundle.getBundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -41,7 +42,7 @@ public class DetailActivity extends AppCompatActivity {
         TextView tvWorkMailDetail = findViewById(R.id.tv_work_mail_detail);
 
 
-        imgAvtDetail.setImageResource(contact.getResourceID());
+        imgAvtDetail.setImageURI(Uri.parse(contact.getThumbnail()));
         tvNameDetail.setText(contact.getName());
         int whiteStarID = getResources().getIdentifier("white_circle_star" ,
                 "drawable", getPackageName());

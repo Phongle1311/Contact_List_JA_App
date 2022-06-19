@@ -2,13 +2,13 @@ package com.example.contactlist.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -86,7 +86,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             contactViewHolder = (ContactViewHolder) holder;
 //            contactViewHolder.imgBtn.setImageResource(contact.getResourceID()); // chưa đúng, sửa sau
             contactViewHolder.tv.setText(contact.getName());
-            contactViewHolder.civ.setImageResource(contact.getResourceID());
+            contactViewHolder.civ.setImageURI(Uri.parse(contact.getThumbnail()));
 
             contactViewHolder.lItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -99,7 +99,8 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ContactHeadViewHolder contactHeadViewHolder;
             contactHeadViewHolder = (ContactHeadViewHolder) holder;
             contactHeadViewHolder.tvHead.setText(contact.getName());
-            contactHeadViewHolder.civHead.setImageResource(contact.getResourceID());
+            contactHeadViewHolder.imgBtnHead.setText(contact.getName().charAt(0) + "");
+            contactHeadViewHolder.civHead.setImageURI(Uri.parse(contact.getThumbnail()));
 
             contactHeadViewHolder.lItemHead.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -112,7 +113,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ContactSpecialViewHolder contactSpecialViewHolder;
             contactSpecialViewHolder = (ContactSpecialViewHolder) holder;
             contactSpecialViewHolder.tvSpecial.setText(contact.getName());
-            contactSpecialViewHolder.civSpecial.setImageResource(contact.getResourceID());
+            contactSpecialViewHolder.civSpecial.setImageURI(Uri.parse(contact.getThumbnail()));
 
             contactSpecialViewHolder.lItemSpecial.setOnClickListener(new View.OnClickListener() {
                 @Override

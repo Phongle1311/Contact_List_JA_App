@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.Window;
 import android.widget.Toast;
@@ -43,7 +44,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private RecyclerView rcvContact;
     private ContactAdapter contactAdapter;
-    private ArrayList<Contact> mListContacts;
+    private List<Contact> mListContacts;
     private SearchView searchView;
 
     @Override
@@ -59,6 +60,23 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rcvContact.setLayoutManager(linearLayoutManager);
         rcvContact.setAdapter(contactAdapter);
+
+        SearchView searchView = findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchView.clearFocus();
+//                contactAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                contactAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
     }
 
     // avoid memory leak
@@ -70,11 +88,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getContacts() {
+        List<Contact> favorites = new ArrayList<Contact>();
         String contactId = "";
         String displayName = "";
+        String phoneThumb = "";
         int index;
 
-        Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+        Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,
+                null, null, null, null);
+//                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 index = cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER);
@@ -84,17 +106,37 @@ public class MainActivity extends AppCompatActivity {
                     contactId = cursor.getString(index);
                     index = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
                     displayName = cursor.getString(index);
+
                     Cursor phoneCursor = getContentResolver().query(
                             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,
                             ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                            new String[]{contactId},
-                            null);
+                            new String[]{contactId},null);
+                    index = phoneCursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI);
+//                    phoneThumb = phoneCursor.getString(index);
                     if (phoneCursor.moveToNext()) {
                         index = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
                         String phoneNumber = phoneCursor.getString(index);
-                        Contact contact = new Contact(displayName, R.drawable.hangouts_icon,
-                                phoneNumber, phoneNumber, "gmail", "gmail", false);
-                        contact.setType(3);
+
+//                        index = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI);
+                        Contact contact = new Contact(displayName);
+                        contact.setMobilePhoneNumber(phoneNumber);
+                        contact.setWorkPhoneNumber(phoneNumber);
+                        contact.setPersonMail("gmail");
+                        contact.setWorkMail("gmail");
+                        contact.setImportant(true);
+                        contact.setThumbnail(phoneThumb);
+                        contact.setType(1);
+                        if (contact.getImportant())
+                            favorites.add(contact);
+
+                        contact = new Contact(displayName);
+                        contact.setMobilePhoneNumber(phoneNumber);
+                        contact.setWorkPhoneNumber(phoneNumber);
+                        contact.setPersonMail("gmail");
+                        contact.setWorkMail("gmail");
+                        contact.setThumbnail(phoneThumb);
+                        contact.setImportant(true);
+                        contact.setType(1);
                         mListContacts.add(contact);
                     }
                     phoneCursor.close();
@@ -109,6 +151,28 @@ public class MainActivity extends AppCompatActivity {
                 return lhs.getName().toLowerCase().compareTo(rhs.getName().toLowerCase());
             }
         });
+
+
+        for (int i = 0; i < mListContacts.size(); i++) {
+            Contact contact = mListContacts.get(i);
+            contact.setType(2);
+            if (i != 0) {
+                if (contact.getName().toLowerCase().charAt(0) == mListContacts.get(i-1)
+                        .getName().toLowerCase().charAt(0)) {
+                    contact.setType(1);
+                }
+            }
+            mListContacts.set(i, contact);
+        }
+
+        if (favorites.size()>0) {
+            Contact c = favorites.get(0);
+            c.setType(3);
+            favorites.set(0, c);
+            favorites.addAll(mListContacts);
+            mListContacts = favorites;
+        }
+
         //loadingPB.setVisibility(View.GONE);
         //contactRVAdapter.notifyDataSetChanged();
     }
@@ -176,32 +240,7 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu, menu);
-//        getMenuInflater().inflate(R.layout.activity_main, menu);
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = findViewById(R.id.searchView);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setMaxWidth(Integer.MAX_VALUE);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                contactAdapter.getFilter().filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                contactAdapter.getFilter().filter(newText);
-                return false;
-            }
-        });
-
-        return true;
-    }
+    public static final String TAG = "abc";
 
     // logic back-pressed when opening search view
     @Override
@@ -213,3 +252,55 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 }
+
+//    @Override
+//    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+//        super.onActivityResult(reqCode, resultCode, data);
+//        if (resultCode == RESULT_OK) {
+//            switch (reqCode) {
+//                case SELECT_CONTACT:
+//                    Uri contactData = data.getData();
+//                    Cursor c = getContentResolver().query(contactData, null, null, null, null);
+//                    if (c.moveToFirst()) {
+//                        String contactId = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
+//                        String hasNumber = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+//                        String num = "";
+//                        if (Integer.valueOf(hasNumber) == 1) {
+//                            Cursor numbers = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
+//                            if (numbers.getCount() > 1) {
+//                                int i = 0;
+//                                String[] phoneNum = new String[numbers.getCount()];
+//                                String[] type = new String[numbers.getCount()];
+//                                String name = "";
+//                                while (numbers.moveToNext()) {
+//                                    name = numbers.getString(numbers.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+//                                    phoneNum[i] = numbers.getString(numbers.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+//                                    type[i] = (String) ContactsContract.CommonDataKinds.Phone.getTypeLabel(this.getResources(), numbers.getInt(numbers.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE)), ""); // insert a type string in front of the number
+//                                    i++;
+//                                }
+//                                makeDialogForMultipleNumbers(phoneNum, type, name);
+//                            } else {
+//                                while (numbers.moveToNext()) {
+//                                    num = numbers.getString(numbers.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+//                                    if (num.contains("+")) {
+//                                        etMobileNumber.setText(num.substring(3, num.length()).replaceAll("[^\\d.]", ""));
+//                                    } else if (num.charAt(0) == 0) {
+//                                        etMobileNumber.setText(num.substring(1, num.length()).replaceAll("[^\\d.]", ""));
+//                                    } else if (num.toString().startsWith("0")) {
+//                                        String mContact = num.substring(num.indexOf("0") + 1);
+//                                        etMobileNumber.setText(mContact.replaceAll("[^\\d.]", ""));
+//                                    } else {
+//                                        etMobileNumber.setText(num.replaceAll("[^\\d.]", ""));
+//                                    }
+//                                    etMobileNumber.clearFocus();
+//                                    etMobileNumber.setSelection(etMobileNumber.length());
+//                                }
+//                            }
+//                        }
+//                    }
+//                    c.close();
+//                    break;
+//            }
+//        }
+//
+//    }
