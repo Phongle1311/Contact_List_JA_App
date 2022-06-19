@@ -107,24 +107,25 @@ public class MainActivity extends AppCompatActivity {
                     index = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
                     displayName = cursor.getString(index);
 
+                    index = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI);
+                    phoneThumb = cursor.getString(index);
+
                     Cursor phoneCursor = getContentResolver().query(
                             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,
                             ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
                             new String[]{contactId},null);
-//                    index = phoneCursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI);
-//                    phoneThumb = phoneCursor.getString(index);
                     if (phoneCursor.moveToNext()) {
                         index = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
                         String phoneNumber = phoneCursor.getString(index);
-                        index = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI);
-                        phoneThumb = phoneCursor.getString(index);
+
                         Contact contact = new Contact(displayName);
                         contact.setMobilePhoneNumber(phoneNumber);
                         contact.setWorkPhoneNumber(phoneNumber);
                         contact.setPersonMail("gmail");
                         contact.setWorkMail("gmail");
                         contact.setImportant(true);
-                        contact.setThumbnail(phoneThumb);
+                        if (phoneThumb != null)
+                            contact.setThumbnail(phoneThumb);
                         contact.setType(1);
                         if (contact.getImportant()){
                             favorites.add(contact);
@@ -133,7 +134,8 @@ public class MainActivity extends AppCompatActivity {
                             contact.setWorkPhoneNumber(phoneNumber);
                             contact.setPersonMail("gmail");
                             contact.setWorkMail("gmail");
-                            contact.setThumbnail(phoneThumb);
+                            if (phoneThumb != null)
+                                contact.setThumbnail(phoneThumb);
                             contact.setImportant(true);
                         }
 

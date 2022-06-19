@@ -42,7 +42,10 @@ public class DetailActivity extends AppCompatActivity {
         TextView tvWorkMailDetail = findViewById(R.id.tv_work_mail_detail);
 
 
-        imgAvtDetail.setImageURI(Uri.parse(contact.getThumbnail()));
+        if (contact.getThumbnail() != null)
+            imgAvtDetail.setImageURI(Uri.parse(contact.getThumbnail()));
+        else
+            imgAvtDetail.setImageResource(R.drawable.ic_person);
         tvNameDetail.setText(contact.getName());
         int whiteStarID = getResources().getIdentifier("white_circle_star" ,
                 "drawable", getPackageName());
