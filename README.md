@@ -7,5 +7,6 @@ An Android application which show list contact and show detail contact.
 - Permissions Check: runtime check (from android 6) with Dexter library.
 - Get data from system using ContentProvider;
 - Search with searchView.
+- Dropdown menu with Spinner view.
 ## Mockup Images:
 __Pixel 4 API 32__

@@ -3,7 +3,11 @@ package com.example.contactlist;
 import static java.util.ResourceBundle.getBundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -40,6 +44,8 @@ public class DetailActivity extends AppCompatActivity {
         TextView tvWorkPhoneDetail = findViewById(R.id.tv_work_phone_detail);
         TextView tvPersonalMailDetail = findViewById(R.id.tv_personal_mail_detail);
         TextView tvWorkMailDetail = findViewById(R.id.tv_work_mail_detail);
+        ImageButton btnMobileMess = findViewById(R.id.btn_mobile_hangouts_detail);
+        ImageButton btnWorkMess = findViewById(R.id.btn_work_hangouts_detail);
 
 
         if (contact.getThumbnail() != null)
@@ -47,17 +53,77 @@ public class DetailActivity extends AppCompatActivity {
         else
             imgAvtDetail.setImageResource(R.drawable.ic_person);
         tvNameDetail.setText(contact.getName());
+
         int whiteStarID = getResources().getIdentifier("white_circle_star" ,
                 "drawable", getPackageName());
         int pinkStarID = getResources().getIdentifier("pink_circle_star" ,
                 "drawable", getPackageName());
-        if (contact.getImportant() == true)
+        if (contact.getImportant())
             btnImportantDetail.setImageResource(pinkStarID);
         else
             btnImportantDetail.setImageResource(whiteStarID);
+
         tvMobilePhoneDetail.setText(contact.getMobilePhoneNumber());
         tvWorkPhoneDetail.setText(contact.getWorkPhoneNumber());
         tvPersonalMailDetail.setText(contact.getPersonMail());
         tvWorkMailDetail.setText(contact.getWorkMail());
+
+        tvMobilePhoneDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                makeCall(contact.getMobilePhoneNumber());
+            }
+        });
+
+        tvWorkPhoneDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                makeCall(contact.getWorkPhoneNumber());
+            }
+        });
+
+        btnMobileMess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendMessage(contact.getMobilePhoneNumber());
+            }
+        });
+
+        btnWorkMess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendMessage(contact.getWorkPhoneNumber());
+            }
+        });
+
+        tvPersonalMailDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendMessage(contact.getPersonMail());
+            }
+        });
+
+        tvWorkMailDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendMessage(contact.getWorkMail());
+            }
+        });
+    }
+
+    private void sendMessage(String number) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + number));
+        intent.putExtra("sms_body", "Enter your messaage");
+        startActivity(intent);
+    }
+
+    private void makeCall(String number) {
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:" + number));
+        if (ActivityCompat.checkSelfPermission(DetailActivity.this,
+                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        startActivity(callIntent);
     }
 }

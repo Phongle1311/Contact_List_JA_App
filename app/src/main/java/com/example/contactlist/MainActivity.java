@@ -21,10 +21,15 @@ import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.contactlist.adapter.CategoryAdapter;
 import com.example.contactlist.adapter.ContactAdapter;
+import com.example.contactlist.modal.Category;
 import com.example.contactlist.modal.Contact;
 
 import com.karumi.dexter.Dexter;
@@ -46,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private ContactAdapter contactAdapter;
     private List<Contact> mListContacts;
     private SearchView searchView;
+    private Spinner spnCategory;
+    private CategoryAdapter categoryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +61,11 @@ public class MainActivity extends AppCompatActivity {
 
         mListContacts = new ArrayList<>();
         requestPermissions();
+
+        spnCategory = findViewById(R.id.spn_category);
+        categoryAdapter = new CategoryAdapter(this, R.layout.item_category_selected,
+                getListCategory());
+        spnCategory.setAdapter(categoryAdapter);
 
         rcvContact = findViewById(R.id.rcv_contact);
         contactAdapter = new ContactAdapter(this, mListContacts);
@@ -77,6 +89,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private List<Category> getListCategory() {
+        List<Category> list = new ArrayList<>();
+        list.add(new Category("All"));
+        list.add(new Category("Favour"));
+        list.add(new Category("Latest"));
+        list.add(new Category("Mostly"));
+        return list;
     }
 
     // avoid memory leak
@@ -121,8 +142,8 @@ public class MainActivity extends AppCompatActivity {
                         Contact contact = new Contact(displayName);
                         contact.setMobilePhoneNumber(phoneNumber);
                         contact.setWorkPhoneNumber(phoneNumber);
-                        contact.setPersonMail("gmail");
-                        contact.setWorkMail("gmail");
+                        contact.setPersonMail("mail@example.com");
+                        contact.setWorkMail("mail@exaple.vn");
                         contact.setImportant(true);
                         if (phoneThumb != null)
                             contact.setThumbnail(phoneThumb);
@@ -132,8 +153,8 @@ public class MainActivity extends AppCompatActivity {
                             contact = new Contact(displayName);
                             contact.setMobilePhoneNumber(phoneNumber);
                             contact.setWorkPhoneNumber(phoneNumber);
-                            contact.setPersonMail("gmail");
-                            contact.setWorkMail("gmail");
+                            contact.setPersonMail("mail@example.com");
+                            contact.setWorkMail("mail@exaple.vn");
                             if (phoneThumb != null)
                                 contact.setThumbnail(phoneThumb);
                             contact.setImportant(true);
@@ -242,8 +263,6 @@ public class MainActivity extends AppCompatActivity {
         });
         builder.show();
     }
-
-    public static final String TAG = "abc";
 
     // logic back-pressed when opening search view
     @Override
