@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:background="@color/snow_white"
     android:orientation="horizontal"
-    android:paddingBottom="30dp"
+    android:paddingBottom="20dp"
     android:weightSum="10">
 
     <ImageButton
@@ -17,6 +17,8 @@
         android:layout_marginBottom="-30dp"
         android:background="@color/snow_white"
         android:contentDescription="@string/first_letter"
+        android:clickable="false"
+        android:focusable="false"
         app:srcCompat="@drawable/ic_star" />
 
     <LinearLayout
@@ -34,7 +36,7 @@
             android:layout_height="wrap_content"
             android:background="@color/snow_white"
             android:orientation="horizontal"
-            android:paddingTop="30dp">
+            android:paddingTop="20dp">
             <TextView
                 android:id="@+id/tv_name_special"
                 android:layout_width="0dp"

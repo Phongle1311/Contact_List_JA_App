@@ -7,10 +7,10 @@
     android:layout_height="wrap_content"
     android:background="@color/snow_white"
     android:orientation="horizontal"
-    android:paddingBottom="30dp"
+    android:paddingBottom="20dp"
     android:weightSum="10">
 
-    <ImageButton
+    <View
         android:id="@+id/btn_first_letter"
         android:layout_width="70dp"
         android:layout_height="match_parent"

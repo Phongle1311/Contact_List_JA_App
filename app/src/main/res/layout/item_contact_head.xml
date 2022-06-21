@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:background="@color/snow_white"
     android:orientation="horizontal"
-    android:paddingBottom="30dp"
+    android:paddingBottom="20dp"
     android:weightSum="10">
 
     <TextView
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:background="@color/snow_white"
             android:orientation="horizontal"
-            android:paddingTop="30dp">
+            android:paddingTop="20dp">
             <TextView
                 android:id="@+id/tv_name_head"
                 android:layout_width="0dp"
