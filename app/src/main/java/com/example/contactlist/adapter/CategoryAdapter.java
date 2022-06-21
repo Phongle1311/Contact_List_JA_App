@@ -26,12 +26,11 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         convertView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_category_selected,parent, false);
 
-        TextView tvCategorySelected = (TextView) convertView.findViewById(R.id.tv_category_selected);
+        TextView tvCategorySelected = convertView.findViewById(R.id.tv_category_selected);
         Category category = this.getItem(position);
         if (category!=null) {
             tvCategorySelected.setText(category.getName());
         }
-
         return convertView;
     }
 
@@ -40,7 +39,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         convertView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_category,parent, false);
 
-        TextView tvCategory = (TextView) convertView.findViewById(R.id.tv_category);
+        TextView tvCategory = convertView.findViewById(R.id.tv_category);
         Category category = this.getItem(position);
         if (category!=null) {
             tvCategory.setText(category.getName());

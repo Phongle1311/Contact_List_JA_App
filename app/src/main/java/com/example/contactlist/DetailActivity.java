@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.contactlist.modal.Contact;
@@ -44,6 +45,11 @@ public class DetailActivity extends AppCompatActivity {
         TextView tvWorkPhoneDetail = findViewById(R.id.tv_work_phone_detail);
         TextView tvPersonalMailDetail = findViewById(R.id.tv_personal_mail_detail);
         TextView tvWorkMailDetail = findViewById(R.id.tv_work_mail_detail);
+        LinearLayout mobilePhone = findViewById(R.id.layout_mobile_phone_detail);
+        LinearLayout workPhone = findViewById(R.id.layout_work_phone_detail);
+        LinearLayout personMail = findViewById(R.id.layout_personal_mail_detail);
+        LinearLayout workMail = findViewById(R.id.layout_work_mail_detail);
+
         ImageButton btnMobileMess = findViewById(R.id.btn_mobile_hangouts_detail);
         ImageButton btnWorkMess = findViewById(R.id.btn_work_hangouts_detail);
 
@@ -68,14 +74,14 @@ public class DetailActivity extends AppCompatActivity {
         tvPersonalMailDetail.setText(contact.getPersonMail());
         tvWorkMailDetail.setText(contact.getWorkMail());
 
-        tvMobilePhoneDetail.setOnClickListener(new View.OnClickListener() {
+        mobilePhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 makeCall(contact.getMobilePhoneNumber());
             }
         });
 
-        tvWorkPhoneDetail.setOnClickListener(new View.OnClickListener() {
+        workPhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 makeCall(contact.getWorkPhoneNumber());
@@ -84,16 +90,12 @@ public class DetailActivity extends AppCompatActivity {
 
         btnMobileMess.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                sendMessage(contact.getMobilePhoneNumber());
-            }
+            public void onClick(View view) { sendMessage(contact.getMobilePhoneNumber()); }
         });
 
         btnWorkMess.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                sendMessage(contact.getWorkPhoneNumber());
-            }
+            public void onClick(View view) { sendMessage(contact.getWorkPhoneNumber()); }
         });
 
         tvPersonalMailDetail.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +115,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private void sendMessage(String number) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + number));
-        intent.putExtra("sms_body", "Enter your messaage");
+        intent.putExtra("sms_body", "Enter your message");
         startActivity(intent);
     }
 

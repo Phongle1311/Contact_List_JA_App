@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
+        android:background = "@color/purple_500"
         android:contentDescription="@string/avatar"
         android:maxHeight="250dp"
         android:scaleType="centerCrop"
@@ -33,9 +34,11 @@
         android:layout_alignBottom="@id/img_avt_detail"
         android:layout_marginStart="70dp"
         android:layout_marginBottom="50dp"
+        android:shadowColor="@color/dark_gray"
+        android:shadowRadius="1.5"
         android:text=""
         android:textColor="@color/White"
-        android:textSize="60sp"/>
+        android:textSize="50sp" />
 
     <ImageButton
         android:id="@+id/btn_edit_detail"
@@ -94,7 +97,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text=""
-                        android:textSize="25sp" />
+                        android:textSize="20sp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -102,7 +105,7 @@
                         android:paddingTop="3dp"
                         android:text="@string/mobile"
                         android:textColor="@color/dark_gray"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
                 </LinearLayout>
 
                 <ImageButton
@@ -112,9 +115,9 @@
                     android:layout_gravity="center"
                     android:layout_marginEnd="30dp"
                     android:background="@null"
-                    android:scaleType="centerCrop"
                     android:contentDescription="@string/hangouts"
-                    tools:srcCompat="@drawable/hangouts_icon" />
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/hangouts_icon" />
             </LinearLayout>
         </LinearLayout>
 
@@ -153,7 +156,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text=""
-                            android:textSize="25sp" />
+                            android:textSize="20sp" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -161,7 +164,7 @@
                             android:paddingTop="3dp"
                             android:text="@string/work"
                             android:textColor="@color/dark_gray"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
                     </LinearLayout>
 
                     <ImageButton
@@ -171,9 +174,9 @@
                         android:layout_gravity="center"
                         android:layout_marginEnd="30dp"
                         android:background="@null"
+                        android:contentDescription="@string/hangouts"
                         android:scaleType="centerCrop"
-                        tools:srcCompat="@drawable/hangouts_icon"
-                        android:contentDescription="@string/hangouts" />
+                        android:src="@drawable/hangouts_icon" />
                 </LinearLayout>
 
                 <TextView
@@ -196,29 +199,29 @@
                 android:contentDescription="@string/phone_number"
                 app:srcCompat="@drawable/ic_mail" />
 
-                <LinearLayout
-                    android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:id="@+id/tv_personal_mail_detail"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp">
+                    android:text=""
+                    android:textSize="20sp" />
 
-                    <TextView
-                        android:id="@+id/tv_personal_mail_detail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textSize="25sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="3dp"
-                        android:text="@string/personal"
-                        android:textColor="@color/dark_gray"
-                        android:textSize="18sp" />
-                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="3dp"
+                    android:text="@string/personal"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="16sp" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -246,7 +249,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text=""
-                    android:textSize="25sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -254,7 +257,7 @@
                     android:paddingTop="3dp"
                     android:text="@string/work"
                     android:textColor="@color/dark_gray"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -266,8 +269,8 @@
         android:layout_alignEnd="@+id/img_avt_detail"
         android:layout_alignBottom="@+id/img_avt_detail"
         android:layout_marginEnd="30dp"
-        android:layout_marginBottom="-50dp"
+        android:layout_marginBottom="-40dp"
         android:background="@null"
-        android:contentDescription="@string/turn_back"
+        android:contentDescription="@string/favourite"
         app:srcCompat="@drawable/white_circle_star" />
 </RelativeLayout>

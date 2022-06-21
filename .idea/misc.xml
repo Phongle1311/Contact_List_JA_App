@@ -13,16 +13,17 @@
         <entry key="..\:/phong/Android/Contact_List_JA_App/app/src/main/res/drawable-anydpi/ic_save_name.xml" value="0.243" />
         <entry key="..\:/phong/Android/Contact_List_JA_App/app/src/main/res/drawable-anydpi/ic_search.xml" value="0.1145" />
         <entry key="..\:/phong/Android/Contact_List_JA_App/app/src/main/res/drawable-anydpi/ic_star.xml" value="0.231" />
+        <entry key="..\:/phong/Android/Contact_List_JA_App/app/src/main/res/drawable-v23/pink_circle_star.xml" value="0.137" />
         <entry key="..\:/phong/Android/Contact_List_JA_App/app/src/main/res/drawable-v23/white_circle_star.xml" value="0.2165" />
         <entry key="..\:/phong/Android/Contact_List_JA_App/app/src/main/res/drawable/pink_circle_star.xml" value="0.1145" />
         <entry key="..\:/phong/Android/Contact_List_JA_App/app/src/main/res/drawable/pink_circle_start.xml" value="0.231" />
         <entry key="..\:/phong/Android/Contact_List_JA_App/app/src/main/res/drawable/start_circle.xml" value="0.231" />
         <entry key="..\:/phong/Android/Contact_List_JA_App/app/src/main/res/drawable/white_circle_star.xml" value="0.2165" />
         <entry key="..\:/phong/Android/Contact_List_JA_App/app/src/main/res/layout/activity_detail.xml" value="0.1" />
-        <entry key="..\:/phong/Android/Contact_List_JA_App/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/phong/Android/Contact_List_JA_App/app/src/main/res/layout/activity_main.xml" value="0.36742424242424243" />
         <entry key="..\:/phong/Android/Contact_List_JA_App/app/src/main/res/layout/item_category.xml" value="0.1" />
         <entry key="..\:/phong/Android/Contact_List_JA_App/app/src/main/res/layout/item_category_selected.xml" value="0.1" />
-        <entry key="..\:/phong/Android/Contact_List_JA_App/app/src/main/res/layout/item_contact.xml" value="0.1" />
+        <entry key="..\:/phong/Android/Contact_List_JA_App/app/src/main/res/layout/item_contact.xml" value="0.536" />
         <entry key="..\:/phong/Android/Contact_List_JA_App/app/src/main/res/layout/item_contact_head.xml" value="0.4" />
         <entry key="..\:/phong/Android/Contact_List_JA_App/app/src/main/res/layout/item_contact_special.xml" value="0.25" />
         <entry key="..\:/phong/Android/Contact_List_JA_App/app/src/main/res/layout/item_sv.xml" value="0.25" />

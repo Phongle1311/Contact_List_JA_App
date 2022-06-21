@@ -16,4 +16,5 @@
     <string name="avatar">avatar</string>
     <string name="hangouts">hangouts</string>
     <string name="search_action">Search...</string>
+    <string name="favourite">favourite</string>
 </resources>

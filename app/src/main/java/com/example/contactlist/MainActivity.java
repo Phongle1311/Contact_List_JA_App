@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                searchView.clearFocus();
+//                searchView.clearFocus();
 //                contactAdapter.getFilter().filter(query);
                 return false;
             }
@@ -94,9 +94,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Category> getListCategory() {
         List<Category> list = new ArrayList<>();
         list.add(new Category("All"));
-        list.add(new Category("Favour"));
-        list.add(new Category("Latest"));
-        list.add(new Category("Mostly"));
+        list.add(new Category("Favourites"));
         return list;
     }
 
