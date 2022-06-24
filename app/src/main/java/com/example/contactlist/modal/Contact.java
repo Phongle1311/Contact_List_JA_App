@@ -15,15 +15,6 @@ public class Contact implements Serializable {
     public Contact(String name) {
         this.Name = name;
     }
-//    public Contact(String name, String resourceID, String mobilePhoneNumber, String workPhoneNumber, String personMail, String workMail, Boolean isImportant) {
-//        this.Name = name;
-//        this.thumbnail = resourceID;
-//        this.mobilePhoneNumber = mobilePhoneNumber;
-//        this.workPhoneNumber = workPhoneNumber;
-//        this.personMail = personMail;
-//        this.workMail = workMail;
-//        this.isImportant = isImportant;
-//    }
 
     public String getName() {
         return Name;
