@@ -1,7 +1,5 @@
 package com.example.contactlist;
 
-import static java.util.ResourceBundle.getBundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -10,7 +8,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,12 +23,7 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         ImageButton btnBackDetail= findViewById(R.id.btn_back_detail);
-        btnBackDetail.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
+        btnBackDetail.setOnClickListener(view -> onBackPressed());
 
         Bundle bundle = getIntent().getExtras();
         if (bundle == null)
@@ -47,8 +39,8 @@ public class DetailActivity extends AppCompatActivity {
         TextView tvWorkMailDetail = findViewById(R.id.tv_work_mail_detail);
         LinearLayout mobilePhone = findViewById(R.id.layout_mobile_phone_detail);
         LinearLayout workPhone = findViewById(R.id.layout_work_phone_detail);
-        LinearLayout personMail = findViewById(R.id.layout_personal_mail_detail);
-        LinearLayout workMail = findViewById(R.id.layout_work_mail_detail);
+//        LinearLayout personMail = findViewById(R.id.layout_personal_mail_detail);
+//        LinearLayout workMail = findViewById(R.id.layout_work_mail_detail);
 
         ImageButton btnMobileMess = findViewById(R.id.btn_mobile_hangouts_detail);
         ImageButton btnWorkMess = findViewById(R.id.btn_work_hangouts_detail);
@@ -74,43 +66,17 @@ public class DetailActivity extends AppCompatActivity {
         tvPersonalMailDetail.setText(contact.getPersonMail());
         tvWorkMailDetail.setText(contact.getWorkMail());
 
-        mobilePhone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                makeCall(contact.getMobilePhoneNumber());
-            }
-        });
+        mobilePhone.setOnClickListener(view -> makeCall(contact.getMobilePhoneNumber()));
 
-        workPhone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                makeCall(contact.getWorkPhoneNumber());
-            }
-        });
+        workPhone.setOnClickListener(view -> makeCall(contact.getWorkPhoneNumber()));
 
-        btnMobileMess.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) { sendMessage(contact.getMobilePhoneNumber()); }
-        });
+        btnMobileMess.setOnClickListener(view -> sendMessage(contact.getMobilePhoneNumber()));
 
-        btnWorkMess.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) { sendMessage(contact.getWorkPhoneNumber()); }
-        });
+        btnWorkMess.setOnClickListener(view -> sendMessage(contact.getWorkPhoneNumber()));
 
-        tvPersonalMailDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendMessage(contact.getPersonMail());
-            }
-        });
+        tvPersonalMailDetail.setOnClickListener(view -> sendMessage(contact.getPersonMail()));
 
-        tvWorkMailDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendMessage(contact.getWorkMail());
-            }
-        });
+        tvWorkMailDetail.setOnClickListener(view -> sendMessage(contact.getWorkMail()));
     }
 
     private void sendMessage(String number) {

@@ -1,6 +1,5 @@
 package com.example.contactlist;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,22 +7,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.Settings;
-import android.util.Log;
-import android.view.Menu;
-import android.view.View;
-import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -44,15 +34,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView rcvContact;
     private ContactAdapter contactAdapter;
     private List<Contact> mListContacts;
     private SearchView searchView;
-    private Spinner spnCategory;
-    private CategoryAdapter categoryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,18 +48,18 @@ public class MainActivity extends AppCompatActivity {
         mListContacts = new ArrayList<>();
         requestPermissions();
 
-        spnCategory = findViewById(R.id.spn_category);
-        categoryAdapter = new CategoryAdapter(this, R.layout.item_category_selected,
+        Spinner spnCategory = findViewById(R.id.spn_category);
+        CategoryAdapter categoryAdapter = new CategoryAdapter(this, R.layout.item_category_selected,
                 getListCategory());
         spnCategory.setAdapter(categoryAdapter);
 
-        rcvContact = findViewById(R.id.rcv_contact);
+        RecyclerView rcvContact = findViewById(R.id.rcv_contact);
         contactAdapter = new ContactAdapter(this, mListContacts);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rcvContact.setLayoutManager(linearLayoutManager);
         rcvContact.setAdapter(contactAdapter);
 
-        SearchView searchView = findViewById(R.id.searchView);
+        searchView = findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -227,13 +213,8 @@ public class MainActivity extends AppCompatActivity {
                         permissionToken.continuePermissionRequest();
                     }
                 })
-                .withErrorListener(new PermissionRequestErrorListener() {
-                    @Override
-                    public void onError(DexterError error) {
-                        Toast.makeText(getApplicationContext(), "Error occurred! ",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                })
+                .withErrorListener(error -> Toast.makeText(getApplicationContext(),
+                        "Error occurred! ", Toast.LENGTH_SHORT).show())
                 .onSameThread()
                 .check();
     }
@@ -243,22 +224,14 @@ public class MainActivity extends AppCompatActivity {
         builder.setTitle("Need Permissions");
         builder.setMessage("This app needs permission to use this feature. " +
                 "You can grant them later in app settings.");
-        builder.setPositiveButton("GOTO SETTINGS", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                intent.setData(uri);
-                startActivityForResult(intent, 101);
-            }
+        builder.setPositiveButton("GOTO SETTINGS", (dialog, which) -> {
+            dialog.cancel();
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package", getPackageName(), null);
+            intent.setData(uri);
+            startActivityForResult(intent, 101);
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
         builder.show();
     }
 

@@ -26,7 +26,8 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
+public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+        implements Filterable {
     private static final int TYPE_CONTACT = 1;
     private static final int TYPE_HEAD_CONTACT = 2;
     private static final int TYPE_SPECIAL_CONTACT = 3;
