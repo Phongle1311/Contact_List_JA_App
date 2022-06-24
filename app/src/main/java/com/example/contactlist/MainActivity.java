@@ -1,5 +1,7 @@
 package com.example.contactlist;
 
+import static androidx.core.app.ActivityCompat.startActivityForResult;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +24,7 @@ import com.example.contactlist.adapter.ContactAdapter;
 import com.example.contactlist.modal.Category;
 import com.example.contactlist.modal.Contact;
 
+import com.example.contactlist.modal.ContactList;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -37,7 +40,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private ContactAdapter contactAdapter;
-    private List<Contact> mListContacts;
+    //    private List<Contact> mListContacts;
+    private ContactList mListContacts;
     private SearchView searchView;
 
     @Override
@@ -45,16 +49,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mListContacts = new ArrayList<>();
+//        mListContacts = new ArrayList<>();
+        mListContacts = new ContactList();
         requestPermissions();
 
         Spinner spnCategory = findViewById(R.id.spn_category);
-        CategoryAdapter categoryAdapter = new CategoryAdapter(this, R.layout.item_category_selected,
-                getListCategory());
+        CategoryAdapter categoryAdapter = new CategoryAdapter(this,
+                R.layout.item_category_selected, getListCategory());
         spnCategory.setAdapter(categoryAdapter);
 
         RecyclerView rcvContact = findViewById(R.id.rcv_contact);
-        contactAdapter = new ContactAdapter(this, mListContacts);
+        contactAdapter = new ContactAdapter(this, mListContacts.getList());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rcvContact.setLayoutManager(linearLayoutManager);
         rcvContact.setAdapter(contactAdapter);
@@ -93,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getContacts() {
-        List<Contact> favorites = new ArrayList<Contact>();
+//        List<Contact> favorites = new ArrayList<Contact>();
         String contactId = "";
         String displayName = "";
         String phoneThumb = "";
@@ -112,15 +117,17 @@ public class MainActivity extends AppCompatActivity {
                     index = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
                     displayName = cursor.getString(index);
 
-                    index = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI);
+                    index = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone
+                            .PHOTO_THUMBNAIL_URI);
                     phoneThumb = cursor.getString(index);
 
                     Cursor phoneCursor = getContentResolver().query(
-                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
                             ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                            new String[]{contactId},null);
+                            new String[]{contactId}, null);
                     if (phoneCursor.moveToNext()) {
-                        index = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                        index = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone
+                                .NUMBER);
                         String phoneNumber = phoneCursor.getString(index);
 
                         Contact contact = new Contact(displayName);
@@ -128,23 +135,23 @@ public class MainActivity extends AppCompatActivity {
                         contact.setWorkPhoneNumber(phoneNumber);
                         contact.setPersonMail("mail@example.com");
                         contact.setWorkMail("mail@exaple.vn");
-                        contact.setImportant(true);
+                        contact.setImportant(false);
                         if (phoneThumb != null)
                             contact.setThumbnail(phoneThumb);
                         contact.setType(1);
-                        if (contact.getImportant()){
-                            favorites.add(contact);
-                            contact = new Contact(displayName);
-                            contact.setMobilePhoneNumber(phoneNumber);
-                            contact.setWorkPhoneNumber(phoneNumber);
-                            contact.setPersonMail("mail@example.com");
-                            contact.setWorkMail("mail@exaple.vn");
-                            if (phoneThumb != null)
-                                contact.setThumbnail(phoneThumb);
-                            contact.setImportant(true);
-                        }
+//                        if (contact.getImportant()){
+//                            favorites.add(contact);
+//                            contact = new Contact(displayName);
+//                            contact.setMobilePhoneNumber(phoneNumber);
+//                            contact.setWorkPhoneNumber(phoneNumber);
+//                            contact.setPersonMail("mail@example.com");
+//                            contact.setWorkMail("mail@exaple.vn");
+//                            if (phoneThumb != null)
+//                                contact.setThumbnail(phoneThumb);
+//                            contact.setImportant(true);
+//                        }
 
-                        contact.setType(1);
+//                        contact.setType(1);
                         mListContacts.add(contact);
                     }
                     phoneCursor.close();
@@ -153,19 +160,20 @@ public class MainActivity extends AppCompatActivity {
         }
         cursor.close();
 
-        Collections.sort(mListContacts, new Comparator<Contact>() {
-            @Override
-            public int compare(Contact lhs, Contact rhs) {
-                return lhs.getName().toLowerCase().compareTo(rhs.getName().toLowerCase());
-            }
-        });
+//        Collections.sort(mListContacts, new Comparator<Contact>() {
+//            @Override
+//            public int compare(Contact lhs, Contact rhs) {
+//                return lhs.getName().toLowerCase().compareTo(rhs.getName().toLowerCase());
+//            }
+//        });
+        mListContacts.sort();
 
 
         for (int i = 0; i < mListContacts.size(); i++) {
             Contact contact = mListContacts.get(i);
             contact.setType(2);
             if (i != 0) {
-                if (contact.getName().toLowerCase().charAt(0) == mListContacts.get(i-1)
+                if (contact.getName().toLowerCase().charAt(0) == mListContacts.get(i - 1)
                         .getName().toLowerCase().charAt(0)) {
                     contact.setType(1);
                 }
@@ -173,13 +181,13 @@ public class MainActivity extends AppCompatActivity {
             mListContacts.set(i, contact);
         }
 
-        if (favorites.size()>0) {
-            Contact c = favorites.get(0);
-            c.setType(3);
-            favorites.set(0, c);
-            favorites.addAll(mListContacts);
-            mListContacts = favorites;
-        }
+//        if (favorites.size()>0) {
+//            Contact c = favorites.get(0);
+//            c.setType(3);
+//            favorites.set(0, c);
+//            favorites.addAll(mListContacts);
+//            mListContacts = favorites;
+//        }
 
         //loadingPB.setVisibility(View.GONE);
         //contactRVAdapter.notifyDataSetChanged();
@@ -196,7 +204,8 @@ public class MainActivity extends AppCompatActivity {
                         Manifest.permission.WRITE_CONTACTS)
                 .withListener(new MultiplePermissionsListener() {
                     @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
+                    public void onPermissionsChecked(MultiplePermissionsReport
+                                                             multiplePermissionsReport) {
                         if (multiplePermissionsReport.areAllPermissionsGranted()) {
                             getContacts();
                             Toast.makeText(MainActivity.this, "All the permissions" +

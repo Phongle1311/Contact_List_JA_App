@@ -1,5 +1,7 @@
 package com.example.contactlist.modal;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 public class Contact implements Serializable {
@@ -23,6 +25,20 @@ public class Contact implements Serializable {
         workMail = contact.workMail;
         isImportant = contact.isImportant;
         type = contact.type;
+    }
+
+    @NonNull
+    public Contact clone() {
+//        Contact contact = new Contact(Name);
+//        contact.thumbnail = thumbnail;
+//        contact.mobilePhoneNumber = mobilePhoneNumber;
+//        contact.workPhoneNumber = workPhoneNumber;
+//        contact.personMail = personMail;
+//        contact.workMail = workMail;
+//        contact.isImportant = isImportant;
+//        contact.type = type;
+//        return contact;
+        return new Contact(this);
     }
 
     public String getName() { return Name; }
@@ -60,4 +76,10 @@ public class Contact implements Serializable {
     public int getType() { return type; }
 
     public void setType(int type) { this.type = type; }
+
+    public int compare(Contact contact) {
+        return getName().toLowerCase().compareTo(contact.getName().toLowerCase());
+    }
+
+    public boolean equal(Contact contact) { return this.hashCode() == contact.hashCode(); }
 }

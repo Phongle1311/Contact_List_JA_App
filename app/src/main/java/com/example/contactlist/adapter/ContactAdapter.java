@@ -1,6 +1,9 @@
 package com.example.contactlist.adapter;
 
+import static androidx.core.app.ActivityCompat.startActivityForResult;
+
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.contactlist.DetailActivity;
+import com.example.contactlist.MainActivity;
 import com.example.contactlist.R;
 import com.example.contactlist.modal.Contact;
 
@@ -31,6 +35,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int TYPE_CONTACT = 1;
     private static final int TYPE_HEAD_CONTACT = 2;
     private static final int TYPE_SPECIAL_CONTACT = 3;
+//    private static final int REQUEST_CODE_DETAIL = 0x9345;
 
     private Context mContext;
     private List<Contact> mContactList;
@@ -70,7 +75,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     .inflate(R.layout.item_contact_head, parent, false);
             return new ContactHeadViewHolder(view);
         }
-        View view =  LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_contact_special, parent, false);
         return new ContactSpecialViewHolder(view);
     }
@@ -148,6 +153,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Intent intent = new Intent(mContext, DetailActivity.class);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
+//        mContext.startActivityForResult( intent, REQUEST_CODE_DETAIL);
     }
 
 
