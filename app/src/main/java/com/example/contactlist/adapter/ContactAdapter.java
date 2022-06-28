@@ -1,13 +1,7 @@
 package com.example.contactlist.adapter;
 
-import static androidx.core.app.ActivityCompat.startActivityForResult;
-
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +9,13 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.contactlist.DetailActivity;
-import com.example.contactlist.MainActivity;
 import com.example.contactlist.R;
 import com.example.contactlist.modal.Contact;
+import com.example.contactlist.my_interface.IClickItemContactListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,16 +29,18 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int TYPE_SPECIAL_CONTACT = 3;
 //    private static final int REQUEST_CODE_DETAIL = 0x9345;
 
-    private Context mContext;
+//    private Context mContext;
     private List<Contact> mContactList;
     private final List<Contact> mContactListOld;
+    private IClickItemContactListener iClickItemContactListener;
 
     @SuppressLint("NotifyDataSetChanged")
-    public ContactAdapter(Context context, List<Contact> contactList) {
-        mContext = context;
+    public ContactAdapter(List<Contact> contactList, IClickItemContactListener listener) {
+//        mContext = context;
         mContactList = contactList;
         mContactListOld = mContactList;
         notifyDataSetChanged(); // ...
+        this.iClickItemContactListener = listener;
     }
 
     @Override
@@ -101,7 +95,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return mContactList.size();
     }
 
-    public void release() { mContext = null; }
+//    public void release() { mContext = null; }
 
     public class ContactViewHolder extends RecyclerView.ViewHolder {
         protected LinearLayout item;
@@ -121,7 +115,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 avt.setImageURI(Uri.parse(contact.getThumbnail()));
             else
                 avt.setImageResource(R.drawable.ic_person);
-            item.setOnClickListener(view -> onDetailClick(contact));
+            item.setOnClickListener(view -> iClickItemContactListener.onDetailClick(contact));
         }
     }
 
@@ -146,15 +140,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
 
-    public void onDetailClick(Contact contact) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("object_contact", contact);
 
-        Intent intent = new Intent(mContext, DetailActivity.class);
-        intent.putExtras(bundle);
-        mContext.startActivity(intent);
-//        mContext.startActivityForResult( intent, REQUEST_CODE_DETAIL);
-    }
 
 
     @Override
@@ -174,7 +160,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         }
                     }
                     if (contacts.isEmpty()) {
-                        Toast.makeText(mContext,"No Contact Found", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(mContext,"No Contact Found", Toast.LENGTH_SHORT).show();
                     }
                     mContactList = contacts;
                 }

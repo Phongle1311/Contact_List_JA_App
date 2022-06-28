@@ -25,6 +25,7 @@ import com.example.contactlist.modal.Category;
 import com.example.contactlist.modal.Contact;
 
 import com.example.contactlist.modal.ContactList;
+import com.example.contactlist.my_interface.IClickItemContactListener;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         spnCategory.setAdapter(categoryAdapter);
 
         RecyclerView rcvContact = findViewById(R.id.rcv_contact);
-        contactAdapter = new ContactAdapter(this, mListContacts.getList());
+        contactAdapter = new ContactAdapter(mListContacts.getList(), this::onClickToDetailPage);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rcvContact.setLayoutManager(linearLayoutManager);
         rcvContact.setAdapter(contactAdapter);
@@ -85,17 +86,17 @@ public class MainActivity extends AppCompatActivity {
     private List<Category> getListCategory() {
         List<Category> list = new ArrayList<>();
         list.add(new Category("All"));
-        list.add(new Category("Favourites"));
+        list.add(new Category("Favorites"));
         return list;
     }
 
     // avoid memory leak
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (contactAdapter != null)
-            contactAdapter.release();
-    }
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        if (contactAdapter != null)
+//            contactAdapter.release();
+//    }
 
     private void getContacts() {
 //        List<Contact> favorites = new ArrayList<Contact>();
@@ -252,6 +253,15 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         super.onBackPressed();
+    }
+
+    public void onClickToDetailPage(Contact contact) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("object_contact", contact);
+
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }
 

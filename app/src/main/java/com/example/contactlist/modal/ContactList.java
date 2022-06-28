@@ -2,12 +2,11 @@ package com.example.contactlist.modal;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class ContactList {
-    private List<Contact> contacts;
-    private int msize = 0;
+    private final List<Contact> contacts;
+    private int mSizes = 0;
 
     public ContactList() {
         contacts = new ArrayList<>();
@@ -21,13 +20,13 @@ public class ContactList {
             }
         }
         contacts.add(contacts.size(), contact);
-        msize++;
+        mSizes++;
     }
     public boolean remove (Contact contact) {
         for (int i = 0; i<contacts.size(); i++) {
             if (contact.hashCode() == contacts.get(i).hashCode()) {
                 contacts.remove(i);
-                msize--;
+                mSizes--;
                 return true;
             }
         }
@@ -43,7 +42,7 @@ public class ContactList {
         Collections.sort(contacts, Contact::compare);
     }
     public int size() {
-        return msize;
+        return mSizes;
     }
     public Contact get(int i) {
         return contacts.get(i);
