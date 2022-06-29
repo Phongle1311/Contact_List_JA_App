@@ -27,16 +27,12 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int TYPE_CONTACT = 1;
     private static final int TYPE_HEAD_CONTACT = 2;
     private static final int TYPE_SPECIAL_CONTACT = 3;
-//    private static final int REQUEST_CODE_DETAIL = 0x9345;
-
-//    private Context mContext;
     private List<Contact> mContactList;
     private List<Contact> mContactListOld; // final
     private IClickItemContactListener iClickItemContactListener;
 
     @SuppressLint("NotifyDataSetChanged")
     public ContactAdapter(List<Contact> contactList, IClickItemContactListener listener) {
-//        mContext = context;
         mContactList = contactList;
         mContactListOld = mContactList;
         notifyDataSetChanged(); // ...
@@ -101,8 +97,6 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return mContactList.size();
     }
 
-//    public void release() { mContext = null; }
-
     public class ContactViewHolder extends RecyclerView.ViewHolder {
         protected LinearLayout item;
         protected TextView name;
@@ -145,10 +139,6 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-
-
-
-
     @Override
     public Filter getFilter() {
         return new Filter() {
@@ -164,9 +154,6 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         if (contact.getName().toLowerCase().contains(searchStr.toLowerCase())) {
                             contacts.add(contact);
                         }
-                    }
-                    if (contacts.isEmpty()) {
-//                        Toast.makeText(mContext,"No Contact Found", Toast.LENGTH_SHORT).show();
                     }
                     mContactList = contacts;
                 }

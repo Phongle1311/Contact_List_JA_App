@@ -1,6 +1,10 @@
 package com.example.contactlist;
 
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -34,10 +38,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int REQUEST_CODE_DETAIL = 1;
+//    private static final int REQUEST_CODE_DETAIL = 1;
     private ContactAdapter contactAdapter;
     private ContactList mListContacts;
     private SearchView searchView;
+
+    private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent intent = result.getData();
+                        if (intent == null)
+                            return;
+                        Bundle bundle = intent.getExtras();
+                        if (bundle == null)
+                            return;
+                        Contact contact = (Contact) bundle.get("result_contact");
+                        mListContacts.add(contact);
+                        contactAdapter.setList(mListContacts.getList());
+                    }
+                }
+            }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,22 +247,23 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtras(bundle);
-        startActivityForResult(intent, REQUEST_CODE_DETAIL);
+//        startActivityForResult(intent, REQUEST_CODE_DETAIL);
+        mActivityResultLauncher.launch(intent);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (data == null) return;
-        Bundle bundle = data.getExtras();
-        if (bundle == null)
-            return;
-        if (requestCode == REQUEST_CODE_DETAIL && resultCode == RESULT_OK) {
-            Contact contact = (Contact) bundle.get("result_contact");
-            mListContacts.add(contact);
-            contactAdapter.setList(mListContacts.getList());
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (data == null) return;
+//        Bundle bundle = data.getExtras();
+//        if (bundle == null)
+//            return;
+//        if (requestCode == REQUEST_CODE_DETAIL && resultCode == RESULT_OK) {
+//            Contact contact = (Contact) bundle.get("result_contact");
+//            mListContacts.add(contact);
+//            contactAdapter.setList(mListContacts.getList());
+//        }
+//    }
 }
 
 //    @Override

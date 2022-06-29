@@ -27,9 +27,10 @@ public class ContactList {
         updateType(mSizes -1);
     }
     public boolean remove (Contact contact) {
-        for (int i = 0; i<contacts.size(); i++) {
+        for (int i = 0; i<mSizes; i++) {
             if (contact.hashCode() == contacts.get(i).hashCode()) {
                 contacts.remove(i);
+//                if (i<mSizes) updateType(i+1);
                 mSizes--;
                 return true;
             }
@@ -57,8 +58,16 @@ public class ContactList {
     private void updateType(int i) {
         Contact contact = contacts.get(i);
         if (i == 0) {
-            if (contact.getImportant())
+            if (contact.getImportant()){
                 contact.setType(3);
+                if (mSizes>1) {
+                    Contact next = contacts.get(1);
+                    if (next.getType() == 3) {
+                        next.setType(1);
+                        contacts.set(1,next);
+                    }
+                }
+            }
             else
                 contact.setType(2);
         }

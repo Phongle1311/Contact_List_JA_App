@@ -39,15 +39,6 @@ public class Contact implements Serializable {
 
     @NonNull
     public Contact clone() {
-//        Contact contact = new Contact(Name);
-//        contact.thumbnail = thumbnail;
-//        contact.mobilePhoneNumber = mobilePhoneNumber;
-//        contact.workPhoneNumber = workPhoneNumber;
-//        contact.personMail = personMail;
-//        contact.workMail = workMail;
-//        contact.isImportant = isImportant;
-//        contact.type = type;
-//        return contact;
         return new Contact(this);
     }
 
