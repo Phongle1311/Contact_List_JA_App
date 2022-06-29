@@ -31,7 +31,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 //    private Context mContext;
     private List<Contact> mContactList;
-    private final List<Contact> mContactListOld;
+    private List<Contact> mContactListOld; // final
     private IClickItemContactListener iClickItemContactListener;
 
     @SuppressLint("NotifyDataSetChanged")
@@ -41,6 +41,12 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mContactListOld = mContactList;
         notifyDataSetChanged(); // ...
         this.iClickItemContactListener = listener;
+    }
+
+    public void setList(List<Contact> contactList) {
+        mContactList = contactList;
+        mContactListOld = mContactList;
+        notifyDataSetChanged(); // ...
     }
 
     @Override

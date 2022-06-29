@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,19 +18,35 @@ import com.example.contactlist.modal.Contact;
 
 public class DetailActivity extends AppCompatActivity {
 
+    private Contact contact;
+
+    public DetailActivity() {
+        this.contact = new Contact("");
+    }
+    public DetailActivity(Contact contact) {
+        this.contact = contact;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
         ImageButton btnBackDetail= findViewById(R.id.btn_back_detail);
-        btnBackDetail.setOnClickListener(view -> onBackPressed());
+//        btnBackDetail.setOnClickListener(view -> onBackPressed());
+        btnBackDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                DetailActivity.this.onBackPressed();
+                onClickToMain(contact);
+            }
+        });
 
         Bundle bundle = getIntent().getExtras();
         if (bundle == null)
             return;
 
-        Contact contact = (Contact) bundle.get("object_contact");
+        contact = (Contact) bundle.get("object_contact");
         ImageView imgAvtDetail = findViewById(R.id.img_avt_detail);
         TextView tvNameDetail = findViewById(R.id.tv_name_detail);
         ImageButton btnImportantDetail = findViewById(R.id.btn_important_detail);
@@ -52,14 +69,18 @@ public class DetailActivity extends AppCompatActivity {
             imgAvtDetail.setImageResource(R.drawable.ic_person);
         tvNameDetail.setText(contact.getName());
 
-        int whiteStarID = getResources().getIdentifier("white_circle_star" ,
-                "drawable", getPackageName());
-        int pinkStarID = getResources().getIdentifier("pink_circle_star" ,
-                "drawable", getPackageName());
         if (contact.getImportant())
-            btnImportantDetail.setImageResource(pinkStarID);
+            btnImportantDetail.setImageResource(R.drawable.pink_circle_star);
         else
-            btnImportantDetail.setImageResource(whiteStarID);
+            btnImportantDetail.setImageResource(R.drawable.white_circle_star);
+
+        btnImportantDetail.setOnClickListener(view -> {
+            contact.setImportant(!contact.getImportant());
+            if (contact.getImportant())
+                btnImportantDetail.setImageResource(R.drawable.pink_circle_star);
+            else
+                btnImportantDetail.setImageResource(R.drawable.white_circle_star);
+        });
 
         tvMobilePhoneDetail.setText(contact.getMobilePhoneNumber());
         tvWorkPhoneDetail.setText(contact.getWorkPhoneNumber());
@@ -79,6 +100,16 @@ public class DetailActivity extends AppCompatActivity {
         tvWorkMailDetail.setOnClickListener(view -> sendMessage(contact.getWorkMail()));
     }
 
+    private void onClickToMain(Contact contact) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("result_contact", contact);
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
     private void sendMessage(String number) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + number));
         intent.putExtra("sms_body", "Enter your message");
@@ -94,4 +125,5 @@ public class DetailActivity extends AppCompatActivity {
         }
         startActivity(callIntent);
     }
+
 }

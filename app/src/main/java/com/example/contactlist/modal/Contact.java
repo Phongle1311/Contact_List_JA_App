@@ -14,6 +14,16 @@ public class Contact implements Serializable {
     private Boolean isImportant;
     private int type;
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((mobilePhoneNumber == null) ? 0 : mobilePhoneNumber.hashCode());
+        result = prime * result + ((personMail == null) ? 0 : personMail.hashCode());
+        result = prime * result + ((Name == null) ? 0 : Name.hashCode());
+        return result;
+    }
+
     public Contact(String name) { this.Name = name; }
 
     public Contact(Contact contact) {
@@ -78,6 +88,8 @@ public class Contact implements Serializable {
     public void setType(int type) { this.type = type; }
 
     public int compare(Contact contact) {
+        if (getImportant() && !contact.getImportant()) return -1;
+        if (!getImportant() && contact.getImportant()) return 1;
         return getName().toLowerCase().compareTo(contact.getName().toLowerCase());
     }
 

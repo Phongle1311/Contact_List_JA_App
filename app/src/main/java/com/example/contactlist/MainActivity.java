@@ -1,7 +1,7 @@
 package com.example.contactlist;
 
-import static androidx.core.app.ActivityCompat.startActivityForResult;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -25,23 +24,18 @@ import com.example.contactlist.modal.Category;
 import com.example.contactlist.modal.Contact;
 
 import com.example.contactlist.modal.ContactList;
-import com.example.contactlist.my_interface.IClickItemContactListener;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE_DETAIL = 1;
     private ContactAdapter contactAdapter;
-    //    private List<Contact> mListContacts;
     private ContactList mListContacts;
     private SearchView searchView;
 
@@ -50,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        mListContacts = new ArrayList<>();
         mListContacts = new ContactList();
         requestPermissions();
 
@@ -107,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
 
         Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,
                 null, null, null, null);
-//                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 index = cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER);
@@ -140,19 +132,6 @@ public class MainActivity extends AppCompatActivity {
                         if (phoneThumb != null)
                             contact.setThumbnail(phoneThumb);
                         contact.setType(1);
-//                        if (contact.getImportant()){
-//                            favorites.add(contact);
-//                            contact = new Contact(displayName);
-//                            contact.setMobilePhoneNumber(phoneNumber);
-//                            contact.setWorkPhoneNumber(phoneNumber);
-//                            contact.setPersonMail("mail@example.com");
-//                            contact.setWorkMail("mail@exaple.vn");
-//                            if (phoneThumb != null)
-//                                contact.setThumbnail(phoneThumb);
-//                            contact.setImportant(true);
-//                        }
-
-//                        contact.setType(1);
                         mListContacts.add(contact);
                     }
                     phoneCursor.close();
@@ -161,15 +140,7 @@ public class MainActivity extends AppCompatActivity {
         }
         cursor.close();
 
-//        Collections.sort(mListContacts, new Comparator<Contact>() {
-//            @Override
-//            public int compare(Contact lhs, Contact rhs) {
-//                return lhs.getName().toLowerCase().compareTo(rhs.getName().toLowerCase());
-//            }
-//        });
         mListContacts.sort();
-
-
         for (int i = 0; i < mListContacts.size(); i++) {
             Contact contact = mListContacts.get(i);
             contact.setType(2);
@@ -181,17 +152,6 @@ public class MainActivity extends AppCompatActivity {
             }
             mListContacts.set(i, contact);
         }
-
-//        if (favorites.size()>0) {
-//            Contact c = favorites.get(0);
-//            c.setType(3);
-//            favorites.set(0, c);
-//            favorites.addAll(mListContacts);
-//            mListContacts = favorites;
-//        }
-
-        //loadingPB.setVisibility(View.GONE);
-        //contactRVAdapter.notifyDataSetChanged();
     }
 
 
@@ -256,12 +216,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickToDetailPage(Contact contact) {
+        mListContacts.remove(contact);
+
         Bundle bundle = new Bundle();
         bundle.putSerializable("object_contact", contact);
 
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtras(bundle);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE_DETAIL);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) return;
+        Bundle bundle = data.getExtras();
+        if (bundle == null)
+            return;
+        if (requestCode == REQUEST_CODE_DETAIL && resultCode == RESULT_OK) {
+            Contact contact = (Contact) bundle.get("result_contact");
+            mListContacts.add(contact);
+            contactAdapter.setList(mListContacts.getList());
+        }
     }
 }
 

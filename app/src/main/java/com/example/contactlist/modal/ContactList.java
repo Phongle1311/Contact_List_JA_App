@@ -1,5 +1,7 @@
 package com.example.contactlist.modal;
 
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,11 +18,13 @@ public class ContactList {
         for (int i = 0; i<contacts.size(); i++) {
             if (contact.compare(contacts.get(i)) < 0) {
                 contacts.add(i, contact);
+                mSizes++;
+                updateType(i);
                 return;
             }
         }
-        contacts.add(contacts.size(), contact);
-        mSizes++;
+        contacts.add(mSizes++, contact);
+        updateType(mSizes -1);
     }
     public boolean remove (Contact contact) {
         for (int i = 0; i<contacts.size(); i++) {
@@ -49,5 +53,21 @@ public class ContactList {
     }
     public void set(int i,Contact contact) {
         contacts.set(i, contact);
+    }
+    private void updateType(int i) {
+        Contact contact = contacts.get(i);
+        if (i == 0) {
+            if (contact.getImportant())
+                contact.setType(3);
+            else
+                contact.setType(2);
+        }
+        else {
+            contact.setType(1);
+
+            if (!contact.getImportant() && contact.getName().toLowerCase().charAt(0) !=
+                    contacts.get(i-1).getName().toLowerCase().charAt(0))
+                contact.setType(2);
+        }
     }
 }
