@@ -5,7 +5,6 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-//    private static final int REQUEST_CODE_DETAIL = 1;
     private ContactAdapter contactAdapter;
     private ContactList mListContacts;
     private SearchView searchView;
@@ -152,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                         contact.setWorkPhoneNumber(phoneNumber);
                         contact.setPersonMail("mail@example.com");
                         contact.setWorkMail("mail@exaple.vn");
-                        contact.setImportant(false);
+                        contact.setFavorite(false);
                         if (phoneThumb != null)
                             contact.setThumbnail(phoneThumb);
                         contact.setType(1);
@@ -164,18 +162,18 @@ public class MainActivity extends AppCompatActivity {
         }
         cursor.close();
 
-        mListContacts.sort();
-        for (int i = 0; i < mListContacts.size(); i++) {
-            Contact contact = mListContacts.get(i);
-            contact.setType(2);
-            if (i != 0) {
-                if (contact.getName().toLowerCase().charAt(0) == mListContacts.get(i - 1)
-                        .getName().toLowerCase().charAt(0)) {
-                    contact.setType(1);
-                }
-            }
-            mListContacts.set(i, contact);
-        }
+//        mListContacts.sort();
+//        for (int i = 0; i < mListContacts.size(); i++) {
+//            Contact contact = mListContacts.get(i);
+//            contact.setType(2);
+//            if (i != 0) {
+//                if (contact.getName().toLowerCase().charAt(0) == mListContacts.get(i - 1)
+//                        .getName().toLowerCase().charAt(0)) {
+//                    contact.setType(1);
+//                }
+//            }
+//            mListContacts.set(i, contact);
+//        }
     }
 
 

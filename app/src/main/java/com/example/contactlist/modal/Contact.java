@@ -11,7 +11,7 @@ public class Contact implements Serializable {
     private String workPhoneNumber;
     private String personMail;
     private String workMail;
-    private Boolean isImportant;
+    private Boolean favorite;
     private int type;
 
     @Override
@@ -33,7 +33,7 @@ public class Contact implements Serializable {
         workPhoneNumber = contact.workPhoneNumber;
         personMail = contact.personMail;
         workMail = contact.workMail;
-        isImportant = contact.isImportant;
+        favorite = contact.favorite;
         type = contact.type;
     }
 
@@ -70,17 +70,17 @@ public class Contact implements Serializable {
 
     public void setWorkMail(String workMail) { this.workMail = workMail; }
 
-    public Boolean getImportant() { return isImportant; }
+    public Boolean isFavorite() { return favorite; }
 
-    public void setImportant(Boolean important) { isImportant = important; }
+    public void setFavorite(Boolean important) { favorite = important; }
 
     public int getType() { return type; }
 
     public void setType(int type) { this.type = type; }
 
     public int compare(Contact contact) {
-        if (getImportant() && !contact.getImportant()) return -1;
-        if (!getImportant() && contact.getImportant()) return 1;
+        if (isFavorite() && !contact.isFavorite()) return -1;
+        if (!isFavorite() && contact.isFavorite()) return 1;
         return getName().toLowerCase().compareTo(contact.getName().toLowerCase());
     }
 

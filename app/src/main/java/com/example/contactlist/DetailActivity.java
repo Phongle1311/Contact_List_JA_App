@@ -69,14 +69,14 @@ public class DetailActivity extends AppCompatActivity {
             imgAvtDetail.setImageResource(R.drawable.ic_person);
         tvNameDetail.setText(contact.getName());
 
-        if (contact.getImportant())
+        if (contact.isFavorite())
             btnImportantDetail.setImageResource(R.drawable.pink_circle_star);
         else
             btnImportantDetail.setImageResource(R.drawable.white_circle_star);
 
         btnImportantDetail.setOnClickListener(view -> {
-            contact.setImportant(!contact.getImportant());
-            if (contact.getImportant())
+            contact.setFavorite(!contact.isFavorite());
+            if (contact.isFavorite())
                 btnImportantDetail.setImageResource(R.drawable.pink_circle_star);
             else
                 btnImportantDetail.setImageResource(R.drawable.white_circle_star);
