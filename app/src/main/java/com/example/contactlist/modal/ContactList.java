@@ -7,9 +7,7 @@ public class ContactList {
     private final List<Contact> contacts;
     private int mSize = 0;
 
-    public ContactList() {
-        contacts = new ArrayList<>();
-    }
+    public ContactList() { contacts = new ArrayList<>(); }
 
     public void add(Contact contact) {
         for (int i = 0; i<contacts.size(); i++) {

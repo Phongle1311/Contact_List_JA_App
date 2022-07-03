@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private ContactList mListContacts;
     private SearchView searchView;
 
-    private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(
+    private final ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
 
                 @Override
@@ -105,75 +105,59 @@ public class MainActivity extends AppCompatActivity {
         return list;
     }
 
-    // avoid memory leak
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        if (contactAdapter != null)
-//            contactAdapter.release();
-//    }
-
     private void getContacts() {
-//        List<Contact> favorites = new ArrayList<Contact>();
         String contactId = "";
         String displayName = "";
         String phoneThumb = "";
-        int index;
+        String phoneNumber = "";
+        String phoneType = "";
 
         Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,
                 null, null, null, null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
-                index = cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER);
-                int hasPhoneNumber = Integer.parseInt(cursor.getString(index));
-                if (hasPhoneNumber > 0) {
-                    index = cursor.getColumnIndex(ContactsContract.Contacts._ID);
-                    contactId = cursor.getString(index);
-                    index = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-                    displayName = cursor.getString(index);
+                int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor
+                        .getColumnIndexOrThrow(ContactsContract.Contacts.HAS_PHONE_NUMBER)));
 
-                    index = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone
-                            .PHOTO_THUMBNAIL_URI);
-                    phoneThumb = cursor.getString(index);
+                if (hasPhoneNumber > 0) {
+                    contactId = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract
+                            .Contacts._ID));
+                    displayName = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract
+                            .Contacts.DISPLAY_NAME));
+                    phoneThumb = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract
+                            .CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
+
+                    Contact contact = new Contact(displayName);
 
                     Cursor phoneCursor = getContentResolver().query(
                             ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
                             ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
                             new String[]{contactId}, null);
-                    if (phoneCursor.moveToNext()) {
-                        index = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone
-                                .NUMBER);
-                        String phoneNumber = phoneCursor.getString(index);
-
-                        Contact contact = new Contact(displayName);
-                        contact.setMobilePhoneNumber(phoneNumber);
-                        contact.setWorkPhoneNumber(phoneNumber);
-                        contact.setPersonMail("mail@example.com");
-                        contact.setWorkMail("mail@exaple.vn");
-                        contact.setFavorite(false);
-                        if (phoneThumb != null)
-                            contact.setThumbnail(phoneThumb);
-                        contact.setType(1);
-                        mListContacts.add(contact);
+                    while (phoneCursor.moveToNext()) {
+                        phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndexOrThrow
+                                (ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        phoneType = (String) ContactsContract.CommonDataKinds.Phone.getTypeLabel
+                                (this.getResources(), phoneCursor.getInt(phoneCursor
+                                .getColumnIndexOrThrow(ContactsContract.CommonDataKinds
+                                .Phone.TYPE)), "");
+                        contact.addPhoneNumber(phoneNumber, phoneType);
+//                        Toast.makeText(this, displayName + phoneNumber + phoneType,Toast.LENGTH_SHORT).show();
                     }
+//                    Toast.makeText(this, phoneNumber + phoneType,Toast.LENGTH_SHORT).show();
+                    contact.setMobilePhoneNumber(phoneNumber);
+                    contact.setWorkPhoneNumber(phoneNumber);
+                    contact.setPersonMail("mail@example.com");
+                    contact.setWorkMail("mail@exaple.vn");
+                    contact.setFavorite(false);
+                    if (phoneThumb != null)
+                        contact.setThumbnail(phoneThumb);
+                    contact.setType(1);
+                    mListContacts.add(contact);
                     phoneCursor.close();
                 }
             }
         }
         cursor.close();
-
-//        mListContacts.sort();
-//        for (int i = 0; i < mListContacts.size(); i++) {
-//            Contact contact = mListContacts.get(i);
-//            contact.setType(2);
-//            if (i != 0) {
-//                if (contact.getName().toLowerCase().charAt(0) == mListContacts.get(i - 1)
-//                        .getName().toLowerCase().charAt(0)) {
-//                    contact.setType(1);
-//                }
-//            }
-//            mListContacts.set(i, contact);
-//        }
     }
 
 
@@ -245,23 +229,8 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtras(bundle);
-//        startActivityForResult(intent, REQUEST_CODE_DETAIL);
         mActivityResultLauncher.launch(intent);
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (data == null) return;
-//        Bundle bundle = data.getExtras();
-//        if (bundle == null)
-//            return;
-//        if (requestCode == REQUEST_CODE_DETAIL && resultCode == RESULT_OK) {
-//            Contact contact = (Contact) bundle.get("result_contact");
-//            mListContacts.add(contact);
-//            contactAdapter.setList(mListContacts.getList());
-//        }
-//    }
 }
 
 //    @Override
@@ -273,8 +242,8 @@ public class MainActivity extends AppCompatActivity {
 //                    Uri contactData = data.getData();
 //                    Cursor c = getContentResolver().query(contactData, null, null, null, null);
 //                    if (c.moveToFirst()) {
-//                        String contactId = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
-//                        String hasNumber = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+//                        String contactId = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+//                        String hasNumber = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts.HAS_PHONE_NUMBER));
 //                        String num = "";
 //                        if (Integer.valueOf(hasNumber) == 1) {
 //                            Cursor numbers = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
@@ -284,15 +253,15 @@ public class MainActivity extends AppCompatActivity {
 //                                String[] type = new String[numbers.getCount()];
 //                                String name = "";
 //                                while (numbers.moveToNext()) {
-//                                    name = numbers.getString(numbers.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-//                                    phoneNum[i] = numbers.getString(numbers.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-//                                    type[i] = (String) ContactsContract.CommonDataKinds.Phone.getTypeLabel(this.getResources(), numbers.getInt(numbers.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE)), ""); // insert a type string in front of the number
+//                                    name = numbers.getString(numbers.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+//                                    phoneNum[i] = numbers.getString(numbers.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
+//                                    type[i] = (String) ContactsContract.CommonDataKinds.Phone.getTypeLabel(this.getResources(), numbers.getInt(numbers.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.TYPE)), ""); // insert a type string in front of the number
 //                                    i++;
 //                                }
 //                                makeDialogForMultipleNumbers(phoneNum, type, name);
 //                            } else {
 //                                while (numbers.moveToNext()) {
-//                                    num = numbers.getString(numbers.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+//                                    num = numbers.getString(numbers.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
 //                                    if (num.contains("+")) {
 //                                        etMobileNumber.setText(num.substring(3, num.length()).replaceAll("[^\\d.]", ""));
 //                                    } else if (num.charAt(0) == 0) {

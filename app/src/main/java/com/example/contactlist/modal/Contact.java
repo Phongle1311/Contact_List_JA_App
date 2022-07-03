@@ -3,11 +3,17 @@ package com.example.contactlist.modal;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Contact implements Serializable {
     private String Name;
     private String thumbnail;
-    private String mobilePhoneNumber;
+    private List<String> phoneNumbers = new ArrayList<>();
+    private List<String> phoneTypes = new ArrayList<>();
+    private List<String> mails = new ArrayList<>();
+    private List<String> mailTypes = new ArrayList<>();
+    private String mobilePhoneNumber ;
     private String workPhoneNumber;
     private String personMail;
     private String workMail;
@@ -77,6 +83,16 @@ public class Contact implements Serializable {
     public int getType() { return type; }
 
     public void setType(int type) { this.type = type; }
+
+    public void addPhoneNumber(String number, String type) {
+        phoneNumbers.add(number);
+        phoneTypes.add(type);
+    }
+
+    public void addMail(String mail, String type) {
+        mails.add(mail);
+        mailTypes.add(type);
+    }
 
     public int compare(Contact contact) {
         if (isFavorite() && !contact.isFavorite()) return -1;
