@@ -1,21 +1,15 @@
 package com.example.contactlist;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.contactlist.adapter.MailAdapter;
 import com.example.contactlist.adapter.PhoneNumberAdapter;
@@ -40,7 +34,6 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         ImageButton btnBackDetail= findViewById(R.id.btn_back_detail);
-//        btnBackDetail.setOnClickListener(view -> onBackPressed());
         btnBackDetail.setOnClickListener(view -> onClickToMain(contact));
 
         Bundle bundle = getIntent().getExtras();
@@ -53,12 +46,12 @@ public class DetailActivity extends AppCompatActivity {
         ImageButton btnImportantDetail = findViewById(R.id.btn_important_detail);
 
         rcvPhoneNumber = findViewById(R.id.rcv_phone_number);
-        phoneNumberAdapter = new PhoneNumberAdapter(getPhoneNumber(contact));
+        phoneNumberAdapter = new PhoneNumberAdapter(this, getPhoneNumber(contact));
         rcvPhoneNumber.setLayoutManager(new LinearLayoutManager(this));
         rcvPhoneNumber.setAdapter(phoneNumberAdapter);
 
         rcvMail = findViewById(R.id.rcv_mail);
-        mailAdapter = new MailAdapter(getMail(contact));
+        mailAdapter = new MailAdapter(this, getMail(contact));
         rcvMail.setLayoutManager(new LinearLayoutManager(this));
         rcvMail.setAdapter(mailAdapter);
 
@@ -80,18 +73,16 @@ public class DetailActivity extends AppCompatActivity {
             else
                 btnImportantDetail.setImageResource(R.drawable.white_circle_star);
         });
+    }
 
-//        mobilePhone.setOnClickListener(view -> makeCall(contact.getMobilePhoneNumber()));
-
-//        workPhone.setOnClickListener(view -> makeCall(contact.getWorkPhoneNumber()));
-
-//        btnMobileMess.setOnClickListener(view -> sendMessage(contact.getMobilePhoneNumber()));
-
-//        btnWorkMess.setOnClickListener(view -> sendMessage(contact.getWorkPhoneNumber()));
-
-//        tvPersonalMailDetail.setOnClickListener(view -> sendMessage(contact.getPersonMail()));
-
-//        tvWorkMailDetail.setOnClickListener(view -> sendMessage(contact.getWorkMail()));
+    // avoid memory leak
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (phoneNumberAdapter != null)
+            phoneNumberAdapter.release();
+        if (mailAdapter != null)
+            mailAdapter.release();
     }
 
     private List<Mail> getMail(Contact contact) {
@@ -123,21 +114,4 @@ public class DetailActivity extends AppCompatActivity {
         setResult(RESULT_OK, intent);
         finish();
     }
-
-    private void sendMessage(String number) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + number));
-        intent.putExtra("sms_body", "Enter your message");
-        startActivity(intent);
-    }
-
-    private void makeCall(String number) {
-        Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse("tel:" + number));
-        if (ActivityCompat.checkSelfPermission(DetailActivity.this,
-                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        startActivity(callIntent);
-    }
-
 }

@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 import com.example.contactlist.adapter.CategoryAdapter;
 import com.example.contactlist.adapter.ContactAdapter;
-import com.example.contactlist.adapter.MailAdapter;
 import com.example.contactlist.modal.Category;
 import com.example.contactlist.modal.Contact;
 
@@ -242,60 +241,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtras(bundle);
-//        Toast.makeText(this, contact.getPhoneNumbers().size()+"",Toast.LENGTH_SHORT).show();
 
         mActivityResultLauncher.launch(intent);
     }
 }
-
-//    @Override
-//    public void onActivityResult(int reqCode, int resultCode, Intent data) {
-//        super.onActivityResult(reqCode, resultCode, data);
-//        if (resultCode == RESULT_OK) {
-//            switch (reqCode) {
-//                case SELECT_CONTACT:
-//                    Uri contactData = data.getData();
-//                    Cursor c = getContentResolver().query(contactData, null, null, null, null);
-//                    if (c.moveToFirst()) {
-//                        String contactId = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
-//                        String hasNumber = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts.HAS_PHONE_NUMBER));
-//                        String num = "";
-//                        if (Integer.valueOf(hasNumber) == 1) {
-//                            Cursor numbers = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
-//                            if (numbers.getCount() > 1) {
-//                                int i = 0;
-//                                String[] phoneNum = new String[numbers.getCount()];
-//                                String[] type = new String[numbers.getCount()];
-//                                String name = "";
-//                                while (numbers.moveToNext()) {
-//                                    name = numbers.getString(numbers.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-//                                    phoneNum[i] = numbers.getString(numbers.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
-//                                    type[i] = (String) ContactsContract.CommonDataKinds.Phone.getTypeLabel(this.getResources(), numbers.getInt(numbers.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.TYPE)), ""); // insert a type string in front of the number
-//                                    i++;
-//                                }
-//                                makeDialogForMultipleNumbers(phoneNum, type, name);
-//                            } else {
-//                                while (numbers.moveToNext()) {
-//                                    num = numbers.getString(numbers.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
-//                                    if (num.contains("+")) {
-//                                        etMobileNumber.setText(num.substring(3, num.length()).replaceAll("[^\\d.]", ""));
-//                                    } else if (num.charAt(0) == 0) {
-//                                        etMobileNumber.setText(num.substring(1, num.length()).replaceAll("[^\\d.]", ""));
-//                                    } else if (num.toString().startsWith("0")) {
-//                                        String mContact = num.substring(num.indexOf("0") + 1);
-//                                        etMobileNumber.setText(mContact.replaceAll("[^\\d.]", ""));
-//                                    } else {
-//                                        etMobileNumber.setText(num.replaceAll("[^\\d.]", ""));
-//                                    }
-//                                    etMobileNumber.clearFocus();
-//                                    etMobileNumber.setSelection(etMobileNumber.length());
-//                                }
-//                            }
-//                        }
-//                    }
-//                    c.close();
-//                    break;
-//            }
-//        }
-//
-//    }
