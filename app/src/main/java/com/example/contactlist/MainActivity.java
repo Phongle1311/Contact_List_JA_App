@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.contactlist.adapter.CategoryAdapter;
 import com.example.contactlist.adapter.ContactAdapter;
+import com.example.contactlist.adapter.MailAdapter;
 import com.example.contactlist.modal.Category;
 import com.example.contactlist.modal.Contact;
 
@@ -111,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
         String phoneThumb = "";
         String phoneNumber = "";
         String phoneType = "";
+        String mailAddress = "";
+        String mailType = "";
 
         Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,
                 null, null, null, null);
@@ -141,19 +144,29 @@ public class MainActivity extends AppCompatActivity {
                                 .getColumnIndexOrThrow(ContactsContract.CommonDataKinds
                                 .Phone.TYPE)), "");
                         contact.addPhoneNumber(phoneNumber, phoneType);
-//                        Toast.makeText(this, displayName + phoneNumber + phoneType,Toast.LENGTH_SHORT).show();
                     }
-//                    Toast.makeText(this, phoneNumber + phoneType,Toast.LENGTH_SHORT).show();
-                    contact.setMobilePhoneNumber(phoneNumber);
-                    contact.setWorkPhoneNumber(phoneNumber);
-                    contact.setPersonMail("mail@example.com");
-                    contact.setWorkMail("mail@exaple.vn");
+                    phoneCursor.close();
+
+                    Cursor mailCursor = getContentResolver().query(
+                            ContactsContract.CommonDataKinds.Email.CONTENT_URI, null,
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                            new String[]{contactId}, null);
+                    while (mailCursor.moveToNext()) {
+                        mailAddress = mailCursor.getString(mailCursor.getColumnIndexOrThrow
+                                (ContactsContract.CommonDataKinds.Email.DATA));
+                        mailType = (String) ContactsContract.CommonDataKinds.Email.getTypeLabel
+                                (this.getResources(), mailCursor.getInt(mailCursor
+                                        .getColumnIndexOrThrow(ContactsContract.CommonDataKinds
+                                                .Email.TYPE)), "");
+                        contact.addMail(mailAddress, mailType);
+                    }
+                    mailCursor.close();
+
                     contact.setFavorite(false);
                     if (phoneThumb != null)
                         contact.setThumbnail(phoneThumb);
                     contact.setType(1);
                     mListContacts.add(contact);
-                    phoneCursor.close();
                 }
             }
         }
@@ -229,6 +242,8 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtras(bundle);
+//        Toast.makeText(this, contact.getPhoneNumbers().size()+"",Toast.LENGTH_SHORT).show();
+
         mActivityResultLauncher.launch(intent);
     }
 }

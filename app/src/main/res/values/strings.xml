@@ -10,11 +10,8 @@
     <string name="edit">edit</string>
     <string name="more_info">more information</string>
     <string name="phone_number">phone number</string>
-    <string name="personal">Personal</string>
-    <string name="work">Work</string>
-    <string name="mobile">Mobile</string>
     <string name="avatar">avatar</string>
     <string name="hangouts">hangouts</string>
     <string name="search_action">Search...</string>
-    <string name="favourite">favourite</string>
+    <string name="favorite">favorite</string>
 </resources>

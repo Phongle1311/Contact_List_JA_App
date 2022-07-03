@@ -2,6 +2,8 @@ package com.example.contactlist;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Intent;
@@ -13,19 +15,24 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.contactlist.adapter.MailAdapter;
+import com.example.contactlist.adapter.PhoneNumberAdapter;
 import com.example.contactlist.modal.Contact;
+import com.example.contactlist.modal.Mail;
+import com.example.contactlist.modal.PhoneNumber;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
 
     private Contact contact;
-
-    public DetailActivity() {
-        this.contact = new Contact("");
-    }
-    public DetailActivity(Contact contact) {
-        this.contact = contact;
-    }
+    private RecyclerView rcvPhoneNumber;
+    private PhoneNumberAdapter phoneNumberAdapter;
+    private RecyclerView rcvMail;
+    private MailAdapter mailAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +41,7 @@ public class DetailActivity extends AppCompatActivity {
 
         ImageButton btnBackDetail= findViewById(R.id.btn_back_detail);
 //        btnBackDetail.setOnClickListener(view -> onBackPressed());
-        btnBackDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                DetailActivity.this.onBackPressed();
-                onClickToMain(contact);
-            }
-        });
+        btnBackDetail.setOnClickListener(view -> onClickToMain(contact));
 
         Bundle bundle = getIntent().getExtras();
         if (bundle == null)
@@ -50,18 +51,16 @@ public class DetailActivity extends AppCompatActivity {
         ImageView imgAvtDetail = findViewById(R.id.img_avt_detail);
         TextView tvNameDetail = findViewById(R.id.tv_name_detail);
         ImageButton btnImportantDetail = findViewById(R.id.btn_important_detail);
-        TextView tvMobilePhoneDetail = findViewById(R.id.tv_mobile_phone_detail);
-        TextView tvWorkPhoneDetail = findViewById(R.id.tv_work_phone_detail);
-        TextView tvPersonalMailDetail = findViewById(R.id.tv_personal_mail_detail);
-        TextView tvWorkMailDetail = findViewById(R.id.tv_work_mail_detail);
-        LinearLayout mobilePhone = findViewById(R.id.layout_mobile_phone_detail);
-        LinearLayout workPhone = findViewById(R.id.layout_work_phone_detail);
-//        LinearLayout personMail = findViewById(R.id.layout_personal_mail_detail);
-//        LinearLayout workMail = findViewById(R.id.layout_work_mail_detail);
 
-        ImageButton btnMobileMess = findViewById(R.id.btn_mobile_hangouts_detail);
-        ImageButton btnWorkMess = findViewById(R.id.btn_work_hangouts_detail);
+        rcvPhoneNumber = findViewById(R.id.rcv_phone_number);
+        phoneNumberAdapter = new PhoneNumberAdapter(getPhoneNumber(contact));
+        rcvPhoneNumber.setLayoutManager(new LinearLayoutManager(this));
+        rcvPhoneNumber.setAdapter(phoneNumberAdapter);
 
+        rcvMail = findViewById(R.id.rcv_mail);
+        mailAdapter = new MailAdapter(getMail(contact));
+        rcvMail.setLayoutManager(new LinearLayoutManager(this));
+        rcvMail.setAdapter(mailAdapter);
 
         if (contact.getThumbnail() != null)
             imgAvtDetail.setImageURI(Uri.parse(contact.getThumbnail()));
@@ -82,22 +81,37 @@ public class DetailActivity extends AppCompatActivity {
                 btnImportantDetail.setImageResource(R.drawable.white_circle_star);
         });
 
-        tvMobilePhoneDetail.setText(contact.getMobilePhoneNumber());
-        tvWorkPhoneDetail.setText(contact.getWorkPhoneNumber());
-        tvPersonalMailDetail.setText(contact.getPersonMail());
-        tvWorkMailDetail.setText(contact.getWorkMail());
+//        mobilePhone.setOnClickListener(view -> makeCall(contact.getMobilePhoneNumber()));
 
-        mobilePhone.setOnClickListener(view -> makeCall(contact.getMobilePhoneNumber()));
+//        workPhone.setOnClickListener(view -> makeCall(contact.getWorkPhoneNumber()));
 
-        workPhone.setOnClickListener(view -> makeCall(contact.getWorkPhoneNumber()));
+//        btnMobileMess.setOnClickListener(view -> sendMessage(contact.getMobilePhoneNumber()));
 
-        btnMobileMess.setOnClickListener(view -> sendMessage(contact.getMobilePhoneNumber()));
+//        btnWorkMess.setOnClickListener(view -> sendMessage(contact.getWorkPhoneNumber()));
 
-        btnWorkMess.setOnClickListener(view -> sendMessage(contact.getWorkPhoneNumber()));
+//        tvPersonalMailDetail.setOnClickListener(view -> sendMessage(contact.getPersonMail()));
 
-        tvPersonalMailDetail.setOnClickListener(view -> sendMessage(contact.getPersonMail()));
+//        tvWorkMailDetail.setOnClickListener(view -> sendMessage(contact.getWorkMail()));
+    }
 
-        tvWorkMailDetail.setOnClickListener(view -> sendMessage(contact.getWorkMail()));
+    private List<Mail> getMail(Contact contact) {
+        List<Mail> list = new ArrayList<>();
+        List<String> mail = contact.getMails();
+        List<String> type = contact.getMailTypes();
+        int size = mail.size();
+        for(int i = 0; i< size; i++)
+            list.add(new Mail(mail.get(i), type.get(i)));
+        return list;
+    }
+
+    private List<PhoneNumber> getPhoneNumber(Contact contact) {
+        List<PhoneNumber> list = new ArrayList<>();
+        List<String> phoneNumbers = contact.getPhoneNumbers();
+        List<String> phoneTypes = contact.getPhoneTypes();
+        int size = phoneNumbers.size();
+        for (int i = 0; i < size; i++)
+            list.add(new PhoneNumber(phoneNumbers.get(i), phoneTypes.get(i)));
+        return list;
     }
 
     private void onClickToMain(Contact contact) {

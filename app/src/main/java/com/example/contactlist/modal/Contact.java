@@ -13,10 +13,6 @@ public class Contact implements Serializable {
     private List<String> phoneTypes = new ArrayList<>();
     private List<String> mails = new ArrayList<>();
     private List<String> mailTypes = new ArrayList<>();
-    private String mobilePhoneNumber ;
-    private String workPhoneNumber;
-    private String personMail;
-    private String workMail;
     private Boolean favorite;
     private int type;
 
@@ -24,8 +20,8 @@ public class Contact implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((mobilePhoneNumber == null) ? 0 : mobilePhoneNumber.hashCode());
-        result = prime * result + ((personMail == null) ? 0 : personMail.hashCode());
+        result = prime * result + ((phoneNumbers == null) ? 0 : phoneNumbers.hashCode());
+        result = prime * result + ((mails == null) ? 0 : mails.hashCode());
         result = prime * result + ((Name == null) ? 0 : Name.hashCode());
         return result;
     }
@@ -35,18 +31,16 @@ public class Contact implements Serializable {
     public Contact(Contact contact) {
         Name = contact.Name;
         thumbnail = contact.thumbnail;
-        mobilePhoneNumber = contact.mobilePhoneNumber;
-        workPhoneNumber = contact.workPhoneNumber;
-        personMail = contact.personMail;
-        workMail = contact.workMail;
+        phoneNumbers = contact.phoneNumbers;
+        phoneTypes = contact.phoneTypes;
+        mails = contact.mails;
+        mailTypes = contact.mailTypes;
         favorite = contact.favorite;
         type = contact.type;
     }
 
     @NonNull
-    public Contact clone() {
-        return new Contact(this);
-    }
+    public Contact clone() { return new Contact(this); }
 
     public String getName() { return Name; }
 
@@ -56,25 +50,13 @@ public class Contact implements Serializable {
 
     public void setThumbnail(String thumbnail) { this.thumbnail = thumbnail; }
 
-    public String getMobilePhoneNumber() { return mobilePhoneNumber; }
+    public List<String> getPhoneNumbers() { return phoneNumbers; }
 
-    public void setMobilePhoneNumber(String mobilePhoneNumber) {
-        this.mobilePhoneNumber = mobilePhoneNumber;
-    }
+    public List<String> getPhoneTypes() { return phoneTypes; }
 
-    public String getWorkPhoneNumber() { return workPhoneNumber; }
+    public List<String> getMails() { return mails; }
 
-    public void setWorkPhoneNumber(String workPhoneNumber) {
-        this.workPhoneNumber = workPhoneNumber;
-    }
-
-    public String getPersonMail() { return personMail; }
-
-    public void setPersonMail(String personMail) { this.personMail = personMail; }
-
-    public String getWorkMail() { return workMail; }
-
-    public void setWorkMail(String workMail) { this.workMail = workMail; }
+    public List<String> getMailTypes() { return mailTypes; }
 
     public Boolean isFavorite() { return favorite; }
 
