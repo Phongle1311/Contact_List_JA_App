@@ -15,6 +15,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.Settings;
@@ -38,8 +39,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private ContactAdapter contactAdapter;
-    private ContactList mListContacts;
+    private ContactList mListContacts = new ContactList();
     private SearchView searchView;
+    private RecyclerView rcvContact;
 
     private final ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mListContacts = new ContactList();
+        rcvContact = findViewById(R.id.rcv_contact);
         requestPermissions();
 
         Spinner spnCategory = findViewById(R.id.spn_category);
@@ -74,18 +76,13 @@ public class MainActivity extends AppCompatActivity {
                 R.layout.item_category_selected, getListCategory());
         spnCategory.setAdapter(categoryAdapter);
 
-        RecyclerView rcvContact = findViewById(R.id.rcv_contact);
-        contactAdapter = new ContactAdapter(mListContacts.getList(), this::onClickToDetailPage);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        rcvContact.setLayoutManager(linearLayoutManager);
-        rcvContact.setAdapter(contactAdapter);
+
 
         searchView = findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-//                searchView.clearFocus();
-//                contactAdapter.getFilter().filter(query);
+                searchView.clearFocus();
                 return false;
             }
 
@@ -105,14 +102,15 @@ public class MainActivity extends AppCompatActivity {
         return list;
     }
 
-    private void getContacts() {
-        String contactId = "";
-        String displayName = "";
-        String phoneThumb = "";
-        String phoneNumber = "";
-        String phoneType = "";
-        String mailAddress = "";
-        String mailType = "";
+    private ContactList getContacts() {
+        String contactId;
+        String displayName;
+        String phoneThumb;
+        String phoneNumber;
+        String phoneType;
+        String mailAddress;
+        String mailType;
+        ContactList list = new ContactList();
 
         Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,
                 null, null, null, null);
@@ -140,8 +138,8 @@ public class MainActivity extends AppCompatActivity {
                                 (ContactsContract.CommonDataKinds.Phone.NUMBER));
                         phoneType = (String) ContactsContract.CommonDataKinds.Phone.getTypeLabel
                                 (this.getResources(), phoneCursor.getInt(phoneCursor
-                                .getColumnIndexOrThrow(ContactsContract.CommonDataKinds
-                                .Phone.TYPE)), "");
+                                        .getColumnIndexOrThrow(ContactsContract.CommonDataKinds
+                                                .Phone.TYPE)), "");
                         contact.addPhoneNumber(phoneNumber, phoneType);
                     }
                     phoneCursor.close();
@@ -165,14 +163,17 @@ public class MainActivity extends AppCompatActivity {
                     if (phoneThumb != null)
                         contact.setThumbnail(phoneThumb);
                     contact.setType(1);
-                    mListContacts.add(contact);
+                    list.add(contact);
                 }
             }
         }
         cursor.close();
+        return list;
     }
 
-
+//    public void requestPermissions2() {
+//
+//    }
     public void requestPermissions() {
         Dexter
                 .withActivity(this)
@@ -186,7 +187,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onPermissionsChecked(MultiplePermissionsReport
                                                              multiplePermissionsReport) {
                         if (multiplePermissionsReport.areAllPermissionsGranted()) {
-                            getContacts();
+//                            getContacts();
+                            new FetchContacts().execute();
+
                             Toast.makeText(MainActivity.this, "All the permissions" +
                                     " are granted", Toast.LENGTH_SHORT).show();
                         }
@@ -233,15 +236,32 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    public void onClickToDetailPage(Contact contact) {
-        mListContacts.remove(contact);
+    private class FetchContacts extends  AsyncTask<Void, Void, ContactList> {
+        @Override
+        protected ContactList doInBackground(Void... voids) {
+            return getContacts();
+        }
 
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("object_contact", contact);
+        @Override
+        protected void onPostExecute(ContactList contactList) {
+            super.onPostExecute(contactList);
+            mListContacts = contactList;
+            contactAdapter = new ContactAdapter(mListContacts.getList(), this::onClickToDetailPage);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+            rcvContact.setLayoutManager(linearLayoutManager);
+            rcvContact.setAdapter(contactAdapter);
+        }
 
-        Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtras(bundle);
+        public void onClickToDetailPage(Contact contact) {
+            mListContacts.remove(contact);
 
-        mActivityResultLauncher.launch(intent);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("object_contact", contact);
+
+            Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+            intent.putExtras(bundle);
+
+            mActivityResultLauncher.launch(intent);
+        }
     }
 }
