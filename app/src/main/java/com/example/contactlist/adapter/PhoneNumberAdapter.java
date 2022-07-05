@@ -1,10 +1,5 @@
 package com.example.contactlist.adapter;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,22 +8,27 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.contactlist.R;
 import com.example.contactlist.modal.PhoneNumber;
+import com.example.contactlist.my_interface.IClickMakeCall;
+import com.example.contactlist.my_interface.IClickSendSMS;
 
 import java.util.List;
 
 public class PhoneNumberAdapter extends RecyclerView.Adapter<PhoneNumberAdapter.PhoneNumberViewHolder> {
-    private Context mContext;
-    private List<PhoneNumber> mPhoneNumbers;
+    private final List<PhoneNumber> mPhoneNumbers;
+    private final IClickMakeCall iClickMakeCall;
+    private final IClickSendSMS iClickSendSMS;
 
-    public PhoneNumberAdapter(Context context, List<PhoneNumber> phoneNumbers) {
-        mContext = context;
+
+    public PhoneNumberAdapter(List<PhoneNumber> phoneNumbers, IClickMakeCall listenerCall,
+                              IClickSendSMS listenerSMS) {
         mPhoneNumbers = phoneNumbers;
         notifyDataSetChanged();
+        iClickMakeCall = listenerCall;
+        iClickSendSMS = listenerSMS;
     }
 
     @NonNull
@@ -44,10 +44,14 @@ public class PhoneNumberAdapter extends RecyclerView.Adapter<PhoneNumberAdapter.
         PhoneNumber phoneNumber = mPhoneNumbers.get(position);
         if (phoneNumber == null)
             return;
-        holder.item.setOnClickListener(view ->makeCall(phoneNumber.getPhoneNumber()));
+        holder.item.setOnClickListener(view-> {
+            iClickMakeCall.makeCall(phoneNumber.getPhoneNumber());
+        });
         holder.tvPhoneNumber.setText(phoneNumber.getPhoneNumber());
         holder.tvNumberType.setText(phoneNumber.getType());
-        holder.btnHangout.setOnClickListener(view ->sendMessage(phoneNumber.getPhoneNumber()));
+        holder.btnHangout.setOnClickListener(view ->
+                iClickSendSMS.sendSMS(phoneNumber.getPhoneNumber()));
+
     }
 
     @Override
@@ -70,25 +74,5 @@ public class PhoneNumberAdapter extends RecyclerView.Adapter<PhoneNumberAdapter.
             tvNumberType = itemView.findViewById(R.id.tv_number_type);
             btnHangout = itemView.findViewById(R.id.btn_hangouts);
         }
-    }
-
-    public void release() {
-        mContext = null;
-    }
-
-    private void sendMessage(String number) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + number));
-        intent.putExtra("sms_body", "Enter your message");
-        mContext.startActivity(intent);
-    }
-
-    private void makeCall(String number) {
-        Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse("tel:" + number));
-        if (ActivityCompat.checkSelfPermission(mContext,
-                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        mContext.startActivity(callIntent);
     }
 }

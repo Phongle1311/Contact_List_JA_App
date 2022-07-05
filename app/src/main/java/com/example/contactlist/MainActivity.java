@@ -1,10 +1,10 @@
 package com.example.contactlist;
 
-
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,14 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.contactlist.adapter.CategoryAdapter;
 import com.example.contactlist.adapter.ContactAdapter;
@@ -28,16 +29,12 @@ import com.example.contactlist.modal.Category;
 import com.example.contactlist.modal.Contact;
 
 import com.example.contactlist.modal.ContactList;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_READ_CONTACTS = 100;
     private ContactAdapter contactAdapter;
     private ContactList mListContacts = new ContactList();
     private SearchView searchView;
@@ -45,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
     private final ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == RESULT_OK) {
@@ -88,7 +84,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                contactAdapter.getFilter().filter(newText);
+                if (contactAdapter != null)
+                    contactAdapter.getFilter().filter(newText);
                 return false;
             }
         });
@@ -171,44 +168,63 @@ public class MainActivity extends AppCompatActivity {
         return list;
     }
 
-//    public void requestPermissions2() {
-//
-//    }
     public void requestPermissions() {
-        Dexter
-                .withActivity(this)
-                .withPermissions(
-                        Manifest.permission.READ_CONTACTS,
-                        Manifest.permission.CALL_PHONE,
-                        Manifest.permission.SEND_SMS,
-                        Manifest.permission.WRITE_CONTACTS)
-                .withListener(new MultiplePermissionsListener() {
-                    @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport
-                                                             multiplePermissionsReport) {
-                        if (multiplePermissionsReport.areAllPermissionsGranted()) {
-//                            getContacts();
-                            new FetchContacts().execute();
-
-                            Toast.makeText(MainActivity.this, "All the permissions" +
-                                    " are granted", Toast.LENGTH_SHORT).show();
-                        }
-                        if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied()) {
-                            showSettingsDialog();
-                        }
-                    }
-
-                    @Override
-                    public void onPermissionRationaleShouldBeShown
-                            (List<PermissionRequest> list, PermissionToken permissionToken) {
-                        permissionToken.continuePermissionRequest();
-                    }
-                })
-                .withErrorListener(error -> Toast.makeText(getApplicationContext(),
-                        "Error occurred! ", Toast.LENGTH_SHORT).show())
-                .onSameThread()
-                .check();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                new FetchContacts().execute();
+            }
+            else {
+                requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_READ_CONTACTS);
+            }
+        }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_READ_CONTACTS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                new FetchContacts().execute();
+            } else {
+//                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                showSettingsDialog();
+            }
+        }
+    }
+
+//    public void requestPermissions() {
+//        Dexter
+//                .withActivity(this)
+//                .withPermissions(
+//                        Manifest.permission.READ_CONTACTS,
+//                        Manifest.permission.CALL_PHONE,
+//                        Manifest.permission.SEND_SMS,
+//                        Manifest.permission.WRITE_CONTACTS)
+//                .withListener(new MultiplePermissionsListener() {
+//                    @Override
+//                    public void onPermissionsChecked(MultiplePermissionsReport
+//                                                             multiplePermissionsReport) {
+//                        if (multiplePermissionsReport.areAllPermissionsGranted()) {
+//                            Toast.makeText(MainActivity.this, "All the permissions" +
+//                                    " are granted", Toast.LENGTH_SHORT).show();
+//                            new FetchContacts().execute();
+//                        }
+//                        if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied()) {
+//                            showSettingsDialog();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onPermissionRationaleShouldBeShown
+//                            (List<PermissionRequest> list, PermissionToken permissionToken) {
+//                        permissionToken.continuePermissionRequest();
+//                    }
+//                })
+//                .withErrorListener(error -> Toast.makeText(getApplicationContext(),
+//                        "Error occurred! ", Toast.LENGTH_SHORT).show())
+//                .onSameThread()
+//                .check();
+//    }
 
     private void showSettingsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);

@@ -29,7 +29,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int TYPE_SPECIAL_CONTACT = 3;
     private List<Contact> mContactList;
     private List<Contact> mContactListOld; // final
-    private IClickItemContactListener iClickItemContactListener;
+    private final IClickItemContactListener iClickItemContactListener;
 
     @SuppressLint("NotifyDataSetChanged")
     public ContactAdapter(List<Contact> contactList, IClickItemContactListener listener) {
